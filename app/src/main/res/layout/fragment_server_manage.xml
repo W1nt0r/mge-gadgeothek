@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/serverAddTitle"
+        android:layout_marginTop="@dimen/form_element_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Server wählen"
+        android:textSize="@dimen/title_size" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/serverRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/noServer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Kein Gadgeothek-Server vorhanden"
+            android:visibility="visible"/>
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_action_button"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="bottom|end"/>
+    </FrameLayout>
+</LinearLayout>
