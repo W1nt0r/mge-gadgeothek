@@ -5,4 +5,9 @@
     <string name="password_hint">password</string>
     <string name="login_title">Login</string>
     <string name="login">login</string>
+    <string name="registration_title">Registration</string>
+    <string name="name_hint">Name</string>
+    <string name="matrikel_hint">Matrikel-Nr</string>
+    <string name="registration_button">Registrieren</string>
+
 </resources>
