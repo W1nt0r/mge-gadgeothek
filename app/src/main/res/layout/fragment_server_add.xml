@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.schef.gadgeothek.ServerAddFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/form_margin"
+        android:layout_marginStart="@dimen/form_margin">
+
+        <TextView
+            android:id="@+id/serverAddTitle"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Server hinzufügen"
+            android:textSize="@dimen/title_size" />
+
+        <EditText
+            android:id="@+id/serverName"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/serverAddTitle"
+            android:hint="Server-Name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/serverUri"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/serverName"
+            android:hint="Server-URI"
+            android:inputType="textUri" />
+
+        <Button
+            android:id="@+id/serverAddButton"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/serverUri"
+            android:text="Hinzufügen"
+            />
+    </RelativeLayout>
+</FrameLayout>
