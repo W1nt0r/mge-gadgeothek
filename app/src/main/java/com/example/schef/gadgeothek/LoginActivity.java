@@ -14,16 +14,5 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //Testbedingung
-        DBService service = DBService.getDBService(this);
-        SQLiteDatabase db = service.getReadableDatabase();
-
-        Cursor resultSet = db.rawQuery("Select * from currentconnection",null);
-        resultSet.moveToFirst();
-        String name = resultSet.getString(0);
-
-
-        getFragmentManager().beginTransaction().replace(R.id.frameLayout, new RegistrationFragment()).commit();
     }
 }
