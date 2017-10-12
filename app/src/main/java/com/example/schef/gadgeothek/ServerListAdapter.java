@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.ViewHolder> {
 
+    private ServerChanger serverChanger;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView serverName;
@@ -27,7 +29,8 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
 
     private ArrayList<Server> servers;
 
-    public ServerListAdapter(ArrayList<Server> servers) {
+    public ServerListAdapter(ArrayList<Server> servers, ServerChanger serverChanger) {
+        this.serverChanger = serverChanger;
         this.servers = servers;
     }
 
@@ -43,13 +46,13 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Server server = servers.get(position);
+        final Server server = servers.get(position);
         holder.serverName.setText(server.getName());
         holder.serverUri.setText(server.getUri());
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                serverChanger.changeServer(server);
             }
         });
     }
