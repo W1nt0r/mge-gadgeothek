@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Gadgeothek</string>
+
+    <string name="email_hint">email-address</string>
+    <string name="password_hint">password</string>
+    <string name="login_title">Login</string>
+    <string name="login">login</string>
 </resources>

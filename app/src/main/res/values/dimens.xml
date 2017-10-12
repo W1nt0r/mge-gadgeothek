@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+    <dimen name="form_margin">80dp</dimen>
+    <dimen name="title_size">27sp</dimen>
+    <dimen name="form_element_margin">10dp</dimen>
 </resources>
