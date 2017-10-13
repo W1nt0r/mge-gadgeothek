@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Server wählen"
+        android:text="@string/server_choose"
         android:textSize="@dimen/title_size" />
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Kein Gadgeothek-Server vorhanden"
+            android:text="@string/no_server"
             android:visibility="visible"/>
         <Button
             android:id="@+id/addButton"

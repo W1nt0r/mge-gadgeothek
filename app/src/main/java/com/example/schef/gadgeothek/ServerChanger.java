@@ -1,9 +1,7 @@
 package com.example.schef.gadgeothek;
 
-/**
- * Created by reiem on 12.10.2017.
- */
+import com.example.schef.domain.ConnectionData;
 
-public interface ServerChanger {
-    public void changeServer(Server server);
+interface ServerChanger {
+    void changeServer(ConnectionData server);
 }

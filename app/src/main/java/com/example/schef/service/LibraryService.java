@@ -27,6 +27,24 @@ public class LibraryService {
         return token != null;
     }
 
+    public static void checkGadgeothekServerAddress(String url, final Callback<List<Gadget>> callback) {
+        HashMap<String, String> headers = new HashMap<>();
+
+        Request<List<Gadget>> request = new Request<>(HttpVerb.GET, url + "/gadgets", new TypeToken<List<Gadget>>() {
+        }.getType(), headers, null, new Callback<List<Gadget>>() {
+            @Override
+            public void onCompletion(List<Gadget> input) {
+                callback.onCompletion(input);
+            }
+
+            @Override
+            public void onError(String message) {
+                callback.onError(message);
+            }
+        });
+        request.execute();
+    }
+
     public static void login(String mail, String password, final Callback<Boolean> callback) {
         checkServerUrlSet();
         HashMap<String, String> parameter = new HashMap<>();

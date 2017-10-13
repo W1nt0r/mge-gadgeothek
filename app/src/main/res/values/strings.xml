@@ -10,4 +10,15 @@
     <string name="matrikel_hint">Matrikel-Nr</string>
     <string name="registration_button">Registrieren</string>
 
+    <string name="no_server">Kein Gadgeothek-Server vorhanden\nKlicken Sie auf \"+\", um einen Server hinzuzufügen</string>
+    <string name="server_name">Bitte geben Sie einen Namen ein</string>
+    <string name="server_address">Bitte geben Sie einen Server an</string>
+    <string name="server_waiting">Warte auf Server&#8230;</string>
+    <string name="server_added">%1$s hinzugefügt</string>
+    <string name="server_add">Hinzufügen</string>
+    <string name="server_add_title">Server hinzufügen</string>
+    <string name="server_name_hint">Server-Name</string>
+    <string name="server_uri_hint">Server-URI</string>
+    <string name="server_choose">Server wählen</string>
+
 </resources>
