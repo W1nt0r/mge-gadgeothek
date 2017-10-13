@@ -21,10 +21,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         stateStack.push(State.SERVER_MANAGE);
-        showFragment(new ServerManageFragment());
+        showFragment(new ServerManageFragment(), null);
     }
 
-    private void showFragment(Fragment fragment) {
+    private void showFragment(Fragment fragment, Bundle args) {
+        fragment.setArguments(args);
+
         FragmentManager mgr = getFragmentManager();
         FragmentTransaction transaction = mgr.beginTransaction();
         transaction.replace(R.id.frameLayout, fragment);
