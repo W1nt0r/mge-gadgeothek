@@ -1,7 +1,9 @@
 package com.example.schef.domain;
 
 
-public class ConnectionData {
+import java.io.Serializable;
+
+public class ConnectionData implements Serializable {
     private int id;
     private String name;
     private String uri;
