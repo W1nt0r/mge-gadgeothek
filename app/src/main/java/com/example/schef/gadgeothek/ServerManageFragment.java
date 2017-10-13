@@ -21,29 +21,22 @@ import java.util.Comparator;
 
 public class ServerManageFragment extends Fragment {
 
-    private final static ArrayList<Server> servers = new ArrayList<>();
+    private ArrayList<Server> servers;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private ServerListAdapter serverListAdapter;
     private Activity activity;
 
     private void setTestData() {
+        servers = new ArrayList<>();
         servers.add(new Server(0, "Gadgeothek HSR", "mge1.dev.ifs.hsr.ch"));
         servers.add(new Server(1, "Gadgeothek ZHAW", "mge2.dev.ifs.hsr.ch"));
         servers.add(new Server(2, "Test-Server", "mge3.dev.ifs.hsr.ch"));
         servers.add(new Server(3, "Gadgeothek UZH", "mge4.dev.ifs.hsr.ch"));
-        servers.add(new Server(0, "Gadgeothek HSR", "mge1.dev.ifs.hsr.ch"));
-        servers.add(new Server(1, "Gadgeothek ZHAW", "mge2.dev.ifs.hsr.ch"));
-        servers.add(new Server(2, "Test-Server", "mge3.dev.ifs.hsr.ch"));
-        servers.add(new Server(3, "Gadgeothek UZH", "mge4.dev.ifs.hsr.ch"));
-        servers.add(new Server(0, "Gadgeothek HSR", "mge1.dev.ifs.hsr.ch"));
-        servers.add(new Server(1, "Gadgeothek ZHAW", "mge2.dev.ifs.hsr.ch"));
-        servers.add(new Server(2, "Test-Server", "mge3.dev.ifs.hsr.ch"));
-        servers.add(new Server(3, "Gadgeothek UZH", "mge4.dev.ifs.hsr.ch"));
-        servers.add(new Server(0, "Gadgeothek HSR", "mge1.dev.ifs.hsr.ch"));
-        servers.add(new Server(1, "Gadgeothek ZHAW", "mge2.dev.ifs.hsr.ch"));
-        servers.add(new Server(2, "Test-Server", "mge3.dev.ifs.hsr.ch"));
-        servers.add(new Server(3, "Gadgeothek UZH", "mge4.dev.ifs.hsr.ch"));
+        servers.add(new Server(4, "Biltner-Gadgets", "mge1.dev.ifs.hsr.ch"));
+        servers.add(new Server(5, "Herr Döpfel", "mge2.dev.ifs.hsr.ch"));
+        servers.add(new Server(6, "Sergej Fährlich", "mge3.dev.ifs.hsr.ch"));
+        servers.add(new Server(7, "Hans Commited", "mge4.dev.ifs.hsr.ch"));
         Collections.sort(servers, new Comparator<Server>() {
             @Override
             public int compare(Server s1, Server s2) {
@@ -73,7 +66,7 @@ public class ServerManageFragment extends Fragment {
             rootView.findViewById(R.id.serverRecyclerView).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.noServer).setVisibility(View.GONE);
 
-            serverListAdapter = new ServerListAdapter(servers);
+            serverListAdapter = new ServerListAdapter(servers, (ServerChanger)activity);
             layoutManager = new LinearLayoutManager(getActivity());
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.serverRecyclerView);

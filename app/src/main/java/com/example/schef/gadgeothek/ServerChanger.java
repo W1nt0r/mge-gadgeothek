@@ -5,5 +5,5 @@ package com.example.schef.gadgeothek;
  */
 
 public interface ServerChanger {
-    public void changeServer(int id);
+    public void changeServer(Server server);
 }
