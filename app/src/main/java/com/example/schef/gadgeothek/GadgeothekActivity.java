@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.schef.domain.Constants;
 import com.example.schef.domain.Gadget;
@@ -15,7 +16,7 @@ import com.example.schef.service.LibraryService;
 
 import java.util.Stack;
 
-public class GadgeothekActivity extends AppCompatActivity implements GadgetItemListener {
+public class GadgeothekActivity extends AppCompatActivity implements View.OnClickListener, GadgetItemListener {
 
     private Stack<State> stateStack = new Stack<>();
 
@@ -57,6 +58,11 @@ public class GadgeothekActivity extends AppCompatActivity implements GadgetItemL
     @Override
     public void lookupGadgetDetail(Gadget gadget) {
         if(Constants.DEV) Log.d(getString(R.string.app_name), "Clicked on Gadget: " + gadget.getInventoryNumber());
+
+        stateStack.push(State.GADGET_RESERVE);
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.GADGET_ARGS, gadget);
+        showFragment(new ReserveGadgetFragment(), args);
     }
 
     private void testLogin(final Fragment fragment, final Bundle args) {
@@ -72,5 +78,16 @@ public class GadgeothekActivity extends AppCompatActivity implements GadgetItemL
                 Log.d(getString(R.string.app_name), "Failed with message: " + message);
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (stateStack.peek()) {
+            case GADGET_RESERVE:
+                stateStack.pop();
+
+                showFragment(new GadgetListFragment(), null);
+                break;
+        }
     }
 }
