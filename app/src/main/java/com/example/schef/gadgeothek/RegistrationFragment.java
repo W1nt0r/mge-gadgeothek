@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.schef.domain.Constants;
 import com.example.schef.service.Callback;
 import com.example.schef.service.DBService;
 import com.example.schef.service.LibraryService;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
-
-    private final static boolean DEV = true;
 
     private EditText nameField;
     private EditText mailField;
@@ -43,7 +42,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         passwordField = (EditText) root.findViewById(R.id.passwordField);
         passwordRepField = (EditText) root.findViewById(R.id.passwordRepField);
 
-        if(DEV) {
+        if(Constants.DEV) {
             serverAddress = "http://mge1.dev.ifs.hsr.ch/public";
         } else {
             db = DBService.getDBService(null).getReadableDatabase();
@@ -97,12 +96,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                     @Override
                     public void onCompletion(Boolean input) {
                         //insert into db, return to other fragment
-                        Log.d(getString(R.string.app_name), "Registration State: " + input);
+                        if(Constants.DEV) Log.d(getString(R.string.app_name), "Registration State: " + input);
                     }
 
                     @Override
                     public void onError(String message) {
-                        Log.d(getString(R.string.app_name), message);
+                        if(Constants.DEV) Log.d(getString(R.string.app_name), message);
                         String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
 
                         Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
