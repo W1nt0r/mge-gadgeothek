@@ -59,58 +59,46 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        List<String> errMsgs = new ArrayList<>();
         String name = nameField.getText().toString();
         String mail = mailField.getText().toString();
         String matrikelnr = matrikelField.getText().toString();
         String password = passwordField.getText().toString();
         String passwordRep = passwordRepField.getText().toString();
 
-        if(name.equals("")) errMsgs.add("Namens-Feld ist leer");
+        if(name.equals("")) nameField.setError("Namens-Feld ist leer");
 
-        if(mail.equals("")) errMsgs.add("Mail-Adressen-Feld ist leer");
+        if(mail.equals("")) mailField.setError("Mail-Adressen-Feld ist leer");
 
-        if(matrikelnr.equals("")) errMsgs.add("Matrikelnummern-Feld ist leer");
+        if(matrikelnr.equals("")) matrikelField.setError("Matrikelnummern-Feld ist leer");
 
-        if(password.equals("")) errMsgs.add("Passwort-Feld ist leer");
+        if(password.equals("")) passwordField.setError("Passwort-Feld ist leer");
 
-        if(passwordRep.equals("")) errMsgs.add("Passwort-Wiederhlungs-Feld ist leer");
+        if(passwordRep.equals("")) passwordRepField.setError("Passwort-Wiederhlungs-Feld ist leer");
 
-        if(!password.equals(passwordRep)) errMsgs.add("Die eingegebenen Passwörter stimmen nicht miteinander überein");
+        if(!password.equals(passwordRep)) passwordRepField.setError("Die eingegebenen Passwörter stimmen nicht miteinander überein");
 
-        if(!errMsgs.isEmpty()) {
-            StringBuilder builder = new StringBuilder();
+        if (serverAddress != null) {
+            LibraryService.setServerAddress(serverAddress);
+            LibraryService.register(mail, password, name, matrikelnr, new Callback<Boolean>() {
+                @Override
+                public void onCompletion(Boolean input) {
+                    //insert into db, return to other fragment
+                    if(Constants.DEV) Log.d(getString(R.string.app_name), "Registration State: " + input);
 
-            for(int i = 0;i < errMsgs.size() - 1;i++) {
-                builder.append(errMsgs.get(i));
-                builder.append(", ");
-            }
+                    Toast.makeText(getActivity(), "Die Registierung wurde erfolgreich durchgeführt", Toast.LENGTH_SHORT).show();
+                }
 
-            builder.append(errMsgs.get(errMsgs.size() - 1));
+                @Override
+                public void onError(String message) {
+                    if(Constants.DEV) Log.d(getString(R.string.app_name), message);
+                    String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
 
-            Toast.makeText(getActivity(), builder.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
+                }
+            });
         } else {
-            if (serverAddress != null) {
-                LibraryService.setServerAddress(serverAddress);
-                LibraryService.register(mail, password, name, matrikelnr, new Callback<Boolean>() {
-                    @Override
-                    public void onCompletion(Boolean input) {
-                        //insert into db, return to other fragment
-                        if(Constants.DEV) Log.d(getString(R.string.app_name), "Registration State: " + input);
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        if(Constants.DEV) Log.d(getString(R.string.app_name), message);
-                        String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
-
-                        Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-                String errmsg = "Die Serveradresse konnte nicht richtig gelesen werden, bitte melden Sie sich bei der zuständigen Stelle";
-                Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
-            }
+            String errmsg = "Die Serveradresse konnte nicht richtig gelesen werden, bitte melden Sie sich bei der zuständigen Stelle";
+            Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
         }
 
     }
