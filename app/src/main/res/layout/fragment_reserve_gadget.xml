@@ -1,0 +1,143 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="7"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp">
+
+    <TextView
+        android:id="@+id/gadgetDescriptionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gadget Beschreibung"
+        android:layout_row="0"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="@dimen/form_title"
+        android:layout_columnSpan="2"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/gadgetInventorynumberDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inventarnummer:"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetNameDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetManufactorerDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hersteller:"
+        android:layout_column="0"
+        android:layout_row="3"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetConditionDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zustand:"
+        android:layout_column="0"
+        android:layout_row="4"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetPriceDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Herstellerpreis:"
+        android:layout_column="0"
+        android:layout_row="5"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetInventorynumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[nummer]"
+        android:layout_column="1"
+        android:layout_row="1"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[name]"
+        android:layout_column="1"
+        android:layout_row="2"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetManufactorer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[manufacturer]"
+        android:layout_column="1"
+        android:layout_row="3"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetCondition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[condition]"
+        android:layout_column="1"
+        android:layout_row="4"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <TextView
+        android:id="@+id/gadgetPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[price]"
+        android:layout_column="1"
+        android:layout_row="5"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:textSize="@dimen/form_textview_textsize"/>
+
+    <Button
+        android:id="@+id/reserveGadgetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reserviere Gadget"
+        android:layout_columnSpan="2"
+        android:layout_marginTop="15dp"/>
+</GridLayout>

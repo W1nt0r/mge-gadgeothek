@@ -1,8 +1,9 @@
 package com.example.schef.domain;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Gadget {
+public class Gadget implements Serializable {
 
     public enum Condition {NEW, GOOD, DAMAGED, WASTE, LOST}
 
