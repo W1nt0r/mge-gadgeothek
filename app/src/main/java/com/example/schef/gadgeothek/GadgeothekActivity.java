@@ -3,9 +3,12 @@ package com.example.schef.gadgeothek;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.schef.domain.Constants;
@@ -16,7 +19,7 @@ import com.example.schef.service.LibraryService;
 
 import java.util.Stack;
 
-public class GadgeothekActivity extends AppCompatActivity implements View.OnClickListener, GadgetItemListener {
+public class GadgeothekActivity extends AppCompatActivity implements View.OnClickListener, GadgetItemListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private Stack<State> stateStack = new Stack<>();
 
@@ -24,6 +27,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gadgeothek);
+        ((BottomNavigationView) findViewById(R.id.gadgeothekActivityBottomNavi)).setOnNavigationItemSelectedListener(this);
 
         stateStack.push(State.GADGET_LIST);
         if (Constants.DEV) {
@@ -48,7 +52,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 1) {
-            stateStack.pop();
+            if(!stateStack.isEmpty()) stateStack.pop();
             getFragmentManager().popBackStack();
         } else {
             finish();
@@ -88,6 +92,23 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
                 showFragment(new GadgetListFragment(), null);
                 break;
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_gadgets:
+                showFragment(new GadgetListFragment(), null);
+                return true;
+            case R.id.action_reservations:
+                return true;
+            case R.id.action_loans:
+                return true;
+            case R.id.action_server:
+                return true;
+            default:
+                return false;
         }
     }
 }
