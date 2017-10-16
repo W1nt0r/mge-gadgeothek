@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
@@ -73,7 +74,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
 
         updateServerList();
-        Button addButton = rootView.findViewById(R.id.addButton);
+        FloatingActionButton addButton = rootView.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
