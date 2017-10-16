@@ -15,10 +15,15 @@
     <string name="server_address">Bitte geben Sie einen Server an</string>
     <string name="server_waiting">Warte auf Server&#8230;</string>
     <string name="server_added">%1$s hinzugefügt</string>
+    <string name="server_deleted">%1$s gelöscht</string>
     <string name="server_add">Hinzufügen</string>
     <string name="server_add_title">Server hinzufügen</string>
     <string name="server_name_hint">Server-Name</string>
     <string name="server_uri_hint">Server-URI</string>
     <string name="server_choose">Server wählen</string>
+    <string name="server_fail">Der Server konnte nicht erreicht werden!</string>
+    <string name="server_loading">Verbinde mit Server&#8230;</string>
+
+    <string name="logo">Logo Gadgeothek</string>
 
 </resources>
