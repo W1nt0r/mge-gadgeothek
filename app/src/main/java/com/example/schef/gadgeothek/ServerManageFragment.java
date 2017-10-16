@@ -103,7 +103,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     @Override
     public void deleteServer(ConnectionData server) {
         db.execSQL("DELETE FROM connectiondata WHERE id=?", new Integer[]{server.getId()});
-        Toast toast = Toast.makeText(activity.getApplicationContext(), server.getName() + " gelöscht", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_deleted, server.getName()), Toast.LENGTH_SHORT);
         toast.show();
         updateServerList();
     }

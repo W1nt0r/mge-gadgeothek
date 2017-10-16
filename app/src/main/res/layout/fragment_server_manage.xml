@@ -4,7 +4,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/serverAddTitle"
+        android:id="@+id/serverManageTitle"
         android:layout_marginTop="@dimen/form_element_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
