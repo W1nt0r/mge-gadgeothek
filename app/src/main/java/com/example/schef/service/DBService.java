@@ -9,7 +9,7 @@ public class DBService extends SQLiteOpenHelper {
     private static final String DB_NAME = "gadgeothekdb";
     private static final int DB_VERSION = 2;
     private static DBService instance;
-    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid integer, password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) not null);";
+    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid varchar(100), password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) not null);";
     private static final String TABLE_CURRENTCONNECTION_CREATION = "create table currentconnection(name char(7) primary key, connectiondataid integer references connectiondata(id));";
     private static final String INSERT_CURRENCONNECTION_SINGLEENTRY = "insert into currentconnection(name, connectiondataid) values('current', null);";
 
