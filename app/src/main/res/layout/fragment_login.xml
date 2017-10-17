@@ -8,9 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/form_margin"
-        android:layout_marginStart="@dimen/form_margin">
+        android:layout_marginStart="@dimen/form_margin"
+        android:layout_marginTop="100dp"
+        >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:contentDescription="@string/logo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="fill_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/logo_complete"/>
 
         <TextView
+            android:layout_below="@id/logo"
             android:id="@+id/loginTitle"
             android:layout_marginTop="@dimen/form_element_margin"
             android:layout_width="match_parent"
@@ -44,6 +56,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/passwordEditText"
             android:text="@string/login"
+            />
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:layout_below="@id/loginButton"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Register"
             />
     </RelativeLayout>
 
