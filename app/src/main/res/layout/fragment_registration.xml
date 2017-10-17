@@ -6,24 +6,12 @@
     android:layout_marginEnd="@dimen/form_margin"
     tools:context="com.example.schef.gadgeothek.RegistrationFragment">
 
-    <TextView
-        android:id="@+id/registrationTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/registration_title"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="@dimen/form_title"/>
-
     <EditText
         android:id="@+id/matrikelField"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/matrikel_hint"
-        android:layout_below="@id/registrationTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/form_element_margin"/>
 

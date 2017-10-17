@@ -30,6 +30,8 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
 
         displayedGadget = (Gadget) getArguments().getSerializable(Constants.GADGET_ARGS);
 
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
+
         if(Constants.DEV) {
             LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
         }

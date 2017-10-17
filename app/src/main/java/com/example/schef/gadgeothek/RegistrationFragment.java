@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.schef.domain.Constants;
@@ -41,6 +42,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         matrikelField = (EditText) root.findViewById(R.id.matrikelField);
         passwordField = (EditText) root.findViewById(R.id.passwordField);
         passwordRepField = (EditText) root.findViewById(R.id.passwordRepField);
+
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
 
         if(Constants.DEV) {
             serverAddress = "http://mge1.dev.ifs.hsr.ch/public";

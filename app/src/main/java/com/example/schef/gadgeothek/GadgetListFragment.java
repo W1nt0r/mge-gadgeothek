@@ -33,6 +33,8 @@ public class GadgetListFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_gadget_list, container, false);
 
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
+
         if(Constants.DEV) {
             LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
         }
