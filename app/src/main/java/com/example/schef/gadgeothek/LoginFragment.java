@@ -45,34 +45,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String passwd = password.getText().toString();
        // db.insertNewConnection("TestServer5", "http://mge5.dev.ifs.hsr.ch/public");
         final View v = view;
-        //db.changeCurrentConnection(1);
-        //db = DBService.getDBService((Context)activity);
-       //tring s = db.getCurrentServer();
-        //Toast.makeText((Context)activity, s, Toast.LENGTH_LONG).show();
-        try {
-            db.insertNewConnection("TestServer5", "http://mge5.dev.ifs.hsr.ch/public");
-            db.insertNewConnection("TestServer4", "http://mge5.dev.ifs.hsr.ch/public");
 
-        } catch (Exception ex) {
-            Toast.makeText((Context) activity, "1: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        try {
-            //Toast.makeText((Context) activity, "2: " + Integer.toString(db.getCurrent()), Toast.LENGTH_LONG).show();
-
-            db.changeCurrentConnection(1);
-        } catch (Exception ex) {
-            Toast.makeText((Context) activity, "2: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        try {
-            String s = db.getCurrentServer();
-            Toast.makeText((Context) activity, s, Toast.LENGTH_LONG).show();
-        } catch (Exception ex) {
-            Toast.makeText((Context) activity, "3: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        /*db.changeCurrentConnection(0);
-       */
         LibraryService.login(email, passwd, new Callback<Boolean>()
         {
             @Override
