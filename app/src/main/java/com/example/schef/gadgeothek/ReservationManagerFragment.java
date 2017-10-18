@@ -44,6 +44,9 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
             reservationView.setVisibility(View.GONE);
             errorView.setVisibility(View.GONE);
             loadingView.setVisibility(View.VISIBLE);
+
+            ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
+
             LibraryService.getReservationsForCustomer(new Callback<List<Reservation>>() {
                 @Override
                 public void onCompletion(List<Reservation> input) {
