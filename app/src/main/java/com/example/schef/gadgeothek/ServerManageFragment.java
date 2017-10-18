@@ -78,6 +78,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
+        db = DBService.getDBService(null);
 
         ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
 
@@ -109,7 +110,6 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         super.onAttach(context);
         if (getActivity() instanceof LoginHandler && getActivity() instanceof View.OnClickListener) {
             activity = getActivity();
-            db = DBService.getDBService(null);
         } else {
             throw new AssertionError("Activity must implement interface FrameChanger");
         }
