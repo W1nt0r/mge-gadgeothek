@@ -25,21 +25,18 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gadgeothek);
         ((BottomNavigationView) findViewById(R.id.gadgeothekActivityBottomNavi)).setOnNavigationItemSelectedListener(this);
 
         stateStack.push(State.GADGET_LIST);
-        if (Constants.DEV) {
+        showFragment(new GadgetListFragment(), null);
+        /*if (Constants.DEV) {
             LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
             testLogin(new GadgetListFragment(), null);
         } else {
             showFragment(new GadgetListFragment(), null);
-        }
+        }*/
     }
 
     private void showFragment(Fragment fragment, Bundle args) {
@@ -73,21 +70,6 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         showFragment(new ReserveGadgetFragment(), args);
     }
 
-    private void testLogin(final Fragment fragment, final Bundle args) {
-        LibraryService.login("m@hsr.ch", "12345", new Callback<Boolean>() {
-            @Override
-            public void onCompletion(Boolean input) {
-                Log.d(getString(R.string.app_name), "Successfully made a test login!");
-                showFragment(fragment, args);
-            }
-
-            @Override
-            public void onError(String message) {
-                Log.d(getString(R.string.app_name), "Failed with message: " + message);
-            }
-        });
-    }
-
     @Override
     public void onClick(View view) {
         switch (stateStack.peek()) {
@@ -107,8 +89,8 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
                 return true;
             case R.id.action_reservations:
                 showFragment(new ReservationManagerFragment(), null);
+                return true;
             case R.id.action_loans:
-                showFragment(new LoanFragment(), null);
                 return true;
             case R.id.action_server:
                 return true;

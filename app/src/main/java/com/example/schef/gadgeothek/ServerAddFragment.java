@@ -74,7 +74,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 
-            Cursor resultSet = db.rawQuery("SELECT id FROM connectiondata WHERE servername=?", new String[] { name });
+            Cursor resultSet = db.rawQuery("SELECT id FROM connectiondata WHERE servername=? OR serveraddress=?", new String[] { name, address });
             if (!resultSet.moveToNext()) {
                 addButton.setEnabled(false);
                 addButton.setText(getString(R.string.server_waiting));
