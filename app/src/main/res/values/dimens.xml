@@ -9,6 +9,8 @@
     <dimen name="bar_heights">56dp</dimen>
     <dimen name="toolbar_title">27sp</dimen>
     <dimen name="toolbar_margin_start">72dp</dimen>
+    <dimen name="toolbar_margin_icon_start">32dp</dimen>
+    <dimen name="toolbar_icon_size">32dp</dimen>
     <dimen name="list_margin_start">16dp</dimen>
     <dimen name="list_item_height">72dp</dimen>
 </resources>
