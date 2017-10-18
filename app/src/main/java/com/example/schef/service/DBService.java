@@ -23,6 +23,7 @@ public class DBService extends SQLiteOpenHelper {
     private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('TOKEN', 'CUSTOMERID', 'PASSWORD', 'CUSTOMERMAIL', 'SERVERNAME', 'SERVERADDRESS');";
     private static final String GET_CONNECTIONS = "select * from connectiondata;";
     private static final String GET_CURRENT_CONNECTION = "select * from connectiondata where id = [ID];";
+    private static final String UPDATE_CONNECTION = "update connectiondata set customermail = '[CUSTOMERMAIL]', password = '[PASSWORD]' where id = [ID];";
 
     private DBService(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -71,6 +72,7 @@ public class DBService extends SQLiteOpenHelper {
                 customermail = resultSet.getString(resultSet.getColumnIndex("customermail"));
                 servername = resultSet.getString(resultSet.getColumnIndex("servername"));
                 serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
+                resultSet.close();
                 return new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail);
             } catch (Exception ex) {
                 throw ex;
@@ -115,6 +117,23 @@ public class DBService extends SQLiteOpenHelper {
         while(resultSet.moveToNext());
 
         return connections;
+    }
+
+    public void updateConnection(int id, String customermail, String password){
+        String query = UPDATE_CONNECTION;
+        query = query.replace("[ID]", Integer.toString(id));
+        query = query.replace("[CUSTOMERMAIL]", customermail);
+        query = query.replace("[PASSWORD]", password);
+
+        try{
+            SQLiteDatabase wdb = instance.getWritableDatabase();
+            wdb.beginTransaction();
+            wdb.execSQL(query);
+            wdb.setTransactionSuccessful();
+            wdb.endTransaction();
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     public void insertNewConnection(String token, String customerid, String password, String customermail, String servername, String serveraddress) {
