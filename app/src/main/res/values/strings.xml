@@ -35,4 +35,6 @@
     <string name="logo">Logo Gadgeothek</string>
 
     <string name="reserve_gadget_title">Gadget Reservation</string>
+
+    <string name="no_loans">Keine Ausleihen gefunden</string>
 </resources>
