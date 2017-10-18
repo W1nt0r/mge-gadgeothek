@@ -20,6 +20,8 @@ import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -61,6 +63,13 @@ public class GadgetListFragment extends Fragment {
             @Override
             public void onCompletion(List<Gadget> input) {
                 if(Constants.DEV) Log.d(getString(R.string.app_name), "Successfully retrieved gadgets from Server");
+
+                Collections.sort(input, new Comparator<Gadget>() {
+                    @Override
+                    public int compare(Gadget g1, Gadget g2) {
+                        return g1.getName().toLowerCase().compareTo(g2.getName().toLowerCase());
+                    }
+                });
 
                 setupRecyclerView(input);
             }
