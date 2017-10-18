@@ -5,11 +5,13 @@
     tools:context="com.example.schef.gadgeothek.LoginFragment">
 
     <RelativeLayout
+        android:id="@+id/loginView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/form_margin"
         android:layout_marginStart="@dimen/form_margin"
         android:layout_marginTop="100dp"
+        android:visibility="visible"
         >
 
         <ImageView
@@ -68,4 +70,7 @@
             />
     </RelativeLayout>
 
+    <include layout="@layout/fragment_loading"
+        android:id="@+id/loadingView"
+        android:visibility="gone"/>
 </FrameLayout>

@@ -1,23 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gadgetView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
+    android:visibility="visible">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gadgetlistRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/gadgetlistRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/noGadgets"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Keine Gadgets gefunden"
-            android:visibility="visible"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/noGadgets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Keine Gadgets gefunden"
+        android:visibility="visible"/>
 
-</LinearLayout>
+    <include layout="@layout/fragment_loading"
+        android:id="@+id/loadingView"
+        android:visibility="gone"/>
+</RelativeLayout>
+
+
