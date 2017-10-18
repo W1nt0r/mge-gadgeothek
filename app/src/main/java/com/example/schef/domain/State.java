@@ -6,5 +6,7 @@ public enum State {
     LOADING,
     RESERVATION_MANAGER,
     GADGET_LIST,
-    GADGET_RESERVE
+    GADGET_RESERVE,
+    REGISTRATION,
+    LOGIN
 }

@@ -2,55 +2,55 @@ package com.example.schef.gadgeothek;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.schef.domain.ConnectionData;
+import com.example.schef.domain.Constants;
+import com.example.schef.domain.Gadget;
+import com.example.schef.service.Callback;
 import com.example.schef.service.DBService;
+import com.example.schef.service.LibraryService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 
 public class ServerManageFragment extends Fragment implements ServerManager {
 
     private Activity activity;
     private View rootView;
-    private SQLiteDatabase db;
+    private DBService db;
+    private View serverView;
+    private View loadingView;
 
-    private ArrayList<ConnectionData> getServers() {
-        ArrayList<ConnectionData> serverList = new ArrayList<>();
-
-        Cursor resultSet = db.rawQuery("SELECT id, servername, serveraddress FROM connectiondata", null);
-
-        while(resultSet.moveToNext()) {
-            serverList.add(new ConnectionData(resultSet.getInt(0), resultSet.getString(1), resultSet.getString(2)));
+    private List<ConnectionData> getServers() {
+        List<ConnectionData> serverList = db.getConnections();
+        if (serverList != null) {
+            Collections.sort(serverList, new Comparator<ConnectionData>() {
+                @Override
+                public int compare(ConnectionData c1, ConnectionData c2) {
+                    return c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase());
+                }
+            });
         }
-        resultSet.close();
-        Collections.sort(serverList, new Comparator<ConnectionData>() {
-            @Override
-            public int compare(ConnectionData c1, ConnectionData c2) {
-                return c1.getName().compareTo(c2.getName());
-            }
-        });
         return serverList;
     }
 
     private void updateServerList() {
-        ArrayList<ConnectionData> servers = getServers();
+        List<ConnectionData> servers = getServers();
 
-        if (servers.size() == 0) {
+        if (servers == null || servers.size() == 0) {
             rootView.findViewById(R.id.serverRecyclerView).setVisibility(View.GONE);
             rootView.findViewById(R.id.noServer).setVisibility(View.VISIBLE);
         } else {
@@ -65,6 +65,12 @@ public class ServerManageFragment extends Fragment implements ServerManager {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(serverListAdapter);
         }
+        serverView.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.GONE);
+    }
+
+    private void showToast(String text) {
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -73,7 +79,20 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
 
-        updateServerList();
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
+
+        serverView = rootView.findViewById(R.id.serverView);
+        loadingView = rootView.findViewById(R.id.loadingView);
+        if (getArguments() == null) {
+            updateServerList();
+        } else {
+            ConnectionData connectionData = (ConnectionData)getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
+            if (connectionData != null) {
+                chooseServer(connectionData);
+            } else {
+                updateServerList();
+            }
+        }
         FloatingActionButton addButton = rootView.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,22 +107,37 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (getActivity() instanceof ServerChanger && getActivity() instanceof View.OnClickListener) {
+        if (getActivity() instanceof LoginHandler && getActivity() instanceof View.OnClickListener) {
             activity = getActivity();
-            db = DBService.getDBService(null).getWritableDatabase();
+            db = DBService.getDBService(null);
         } else {
             throw new AssertionError("Activity must implement interface FrameChanger");
         }
     }
 
     @Override
-    public void chooseServer(ConnectionData server) {
-        ((ServerChanger)activity).changeServer(server);
+    public void chooseServer(final ConnectionData connectionData) {
+        serverView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
+        ((TextView)loadingView.findViewById(R.id.loadingText)).setText("Server wird gesucht...");
+        LibraryService.checkGadgeothekServerAddress(connectionData.getUri(), new Callback<List<Gadget>>() {
+            @Override
+            public void onCompletion(List<Gadget> input) {
+                ((LoginHandler)activity).changeServer(connectionData);
+            }
+
+            @Override
+            public void onError(String message) {
+                showToast("Server wurde nicht gefunden");
+                updateServerList();
+            }
+        });
     }
 
     @Override
     public void deleteServer(ConnectionData server) {
-        db.execSQL("DELETE FROM connectiondata WHERE id=?", new Integer[]{server.getId()});
+        SQLiteDatabase sql = db.getWritableDatabase();
+        sql.execSQL("DELETE FROM connectiondata WHERE id=?", new Integer[]{server.getId()});
         Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_deleted, server.getName()), Toast.LENGTH_SHORT);
         toast.show();
         updateServerList();

@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import com.example.schef.domain.ConnectionData;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.ViewHolder> {
 
-    private ArrayList<ConnectionData> servers;
+    private List<ConnectionData> servers;
     private ServerManager serverManager;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +33,7 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
 
     }
 
-    public ServerListAdapter(ArrayList<ConnectionData> servers, ServerManager serverManager) {
+    public ServerListAdapter(List<ConnectionData> servers, ServerManager serverManager) {
         this.serverManager = serverManager;
         this.servers = servers;
     }
