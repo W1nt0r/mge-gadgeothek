@@ -55,7 +55,7 @@ public class GadgetListFragment extends Fragment {
     }
 
     private void setup() {
-        loading(true);
+        showLoadingScreen();
 
         LibraryService.getGadgets(new Callback<List<Gadget>>() {
             @Override
@@ -69,7 +69,7 @@ public class GadgetListFragment extends Fragment {
             public void onError(String message) {
                 if(Constants.DEV) Log.d(getString(R.string.app_name), "Failed with message: " + message);
 
-                loading(false);
+                showError();
 
                 String errmsg = "Es konnten keine Gadgets vom Server geholt werden. Bitte versuchen Sie es später noch einmal";
 
@@ -78,30 +78,42 @@ public class GadgetListFragment extends Fragment {
         });
     }
 
-    private void loading(boolean isLoading) {
-        TextView placeholderTextView = root.findViewById(R.id.noGadgets);
+    private void showLoadingScreen() {
+        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
+        root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
+        root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
 
-        if(isLoading) {
-            placeholderTextView.setText("Gadgets werden geladen, bitte gedulden Sie sich...");
-        } else {
-            placeholderTextView.setText("Keine Gadgets gefunden");
-        }
+        ((TextView) root.findViewById(R.id.loadingText)).setText("Gadgets werden geladen");
+    }
+
+    private void showError() {
+        root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
+        root.findViewById(R.id.loadingView).setVisibility(View.GONE);
+
+        TextView placeholderTextView = root.findViewById(R.id.noGadgets);
+        placeholderTextView.setText("Keine Gadgets gefunden");
+        placeholderTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showRecyclerView() {
+        root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
+        root.findViewById(R.id.loadingView).setVisibility(View.GONE);
+        root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.VISIBLE);
     }
 
     private void setupRecyclerView(List<Gadget> gadgetList) {
         if(gadgetList.size() > 0) {
-            loading(false);
-
-            RecyclerView gadetListView = root.findViewById(R.id.gadgetlistRecyclerView);
-
-            gadetListView.setVisibility(View.VISIBLE);
-            root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
+            RecyclerView gadgetListView = root.findViewById(R.id.gadgetlistRecyclerView);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             GadgetListAdapter adapter = new GadgetListAdapter(gadgetList, (GadgetItemListener) activity);
 
-            gadetListView.setLayoutManager(layoutManager);
-            gadetListView.setAdapter(adapter);
+            gadgetListView.setLayoutManager(layoutManager);
+            gadgetListView.setAdapter(adapter);
+
+            showRecyclerView();
+        } else {
+            showError();
         }
     }
 }

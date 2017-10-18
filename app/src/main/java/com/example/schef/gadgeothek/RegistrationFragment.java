@@ -23,6 +23,7 @@ import java.util.List;
 
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
+    private View root;
     private EditText nameField;
     private EditText mailField;
     private EditText matrikelField;
@@ -34,7 +35,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_registration, container, false);
+        root = inflater.inflate(R.layout.fragment_registration, container, false);
 
         root.findViewById(R.id.registrationButton).setOnClickListener(this);
         nameField = (EditText) root.findViewById(R.id.nameField);
@@ -62,6 +63,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
+        showLoadingScreen();
         String name = nameField.getText().toString();
         String mail = mailField.getText().toString();
         String matrikelnr = matrikelField.getText().toString();
@@ -104,5 +106,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void showLoadingScreen() {
+        root.findViewById(R.id.registrationView).setVisibility(View.GONE);
+        root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
+
+        ((TextView) root.findViewById(R.id.loadingText)).setText("Registrierung wird durchgeführt");
     }
 }
