@@ -1,5 +1,6 @@
 package com.example.schef.gadgeothek;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -82,14 +83,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
+    private void onAttachHelper(Context activity) {
         if (activity instanceof LoginHandler && activity instanceof View.OnClickListener) {
             this.activity = (View.OnClickListener) activity;
         } else {
             throw new AssertionError("Activity must implement View.OnClickListener!");
         }
+    }
+
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override

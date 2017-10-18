@@ -3,6 +3,7 @@ package com.example.schef.gadgeothek;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -78,7 +79,6 @@ public class ServerManageFragment extends Fragment implements ServerManager {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
-        db = DBService.getDBService(null);
 
         ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
 
@@ -105,14 +105,30 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         return rootView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (getActivity() instanceof LoginHandler && getActivity() instanceof View.OnClickListener) {
-            activity = getActivity();
+    private void onAttachHelper(Context context) {
+        if (context instanceof LoginHandler && context instanceof View.OnClickListener) {
+            db = DBService.getDBService(null);
+            activity = (Activity)context;
         } else {
             throw new AssertionError("Activity must implement interface FrameChanger");
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onAttachHelper(context);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override

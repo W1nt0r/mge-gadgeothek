@@ -37,6 +37,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
         View rootView = inflater.inflate(R.layout.fragment_server_add, container, false);
 
         db = DBService.getDBService(null).getWritableDatabase();
+        System.out.println(db);
 
         progressBar = rootView.findViewById(R.id.progressBar);
         addButton = rootView.findViewById(R.id.serverAddButton);
@@ -48,15 +49,29 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
         return rootView;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (getActivity() instanceof View.OnClickListener) {
-            activity = getActivity();
-            db = DBService.getDBService(null).getReadableDatabase();
+    private void onAttachHelper(Context context) {
+        if (context instanceof View.OnClickListener) {
+            activity = (Activity)context;
         } else {
             throw new AssertionError("Activity must implement interface FrameChanger");
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onAttachHelper(context);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override
@@ -74,7 +89,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 
-            Cursor resultSet = db.rawQuery("SELECT id FROM connectiondata WHERE servername=? OR serveraddress=?", new String[] { name, address });
+            Cursor resultSet = db.rawQuery("SELECT servername, serveraddress FROM connectiondata WHERE servername=? OR serveraddress=?", new String[] { name, address });
             if (!resultSet.moveToNext()) {
                 addButton.setEnabled(false);
                 addButton.setText(getString(R.string.server_waiting));
@@ -97,7 +112,12 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
                     }
                 });
             } else {
-                serverName.setError("Der Name wurde bereits verwendet");
+                if (resultSet.getString(0).equals(name)) {
+                    serverName.setError("Der Name wurde bereits verwendet");
+                }
+                if (resultSet.getString(1).equals(address)) {
+                    serverUri.setError("Dieser Server wurde bereits verwendet");
+                }
             }
             resultSet.close();
         }
