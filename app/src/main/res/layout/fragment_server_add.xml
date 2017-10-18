@@ -6,20 +6,10 @@
     android:layout_marginStart="@dimen/form_margin"
     tools:context="com.example.schef.gadgeothek.ServerAddFragment">
 
-    <TextView
-        android:id="@+id/serverAddTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/form_element_margin"
-        android:text="@string/server_add_title"
-        android:textAlignment="center"
-        android:textSize="@dimen/title_size" />
-
     <EditText
         android:id="@+id/serverName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/serverAddTitle"
         android:layout_marginTop="@dimen/form_element_margin"
         android:hint="@string/server_name_hint"
         android:inputType="text" />

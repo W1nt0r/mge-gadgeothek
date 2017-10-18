@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.schef.domain.Gadget;
@@ -35,6 +36,8 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_add, container, false);
+
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_add_title));
 
         db = DBService.getDBService(null).getWritableDatabase();
         System.out.println(db);

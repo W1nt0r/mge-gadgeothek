@@ -14,31 +14,11 @@
         android:visibility="visible"
         >
 
-        <ImageView
-            android:id="@+id/logo"
-            android:contentDescription="@string/logo"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="fill_vertical"
-            android:layout_weight="1"
-            android:src="@drawable/logo_complete"/>
-
-        <TextView
-            android:layout_below="@id/logo"
-            android:id="@+id/loginTitle"
-            android:layout_marginTop="@dimen/form_element_margin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/login_title"
-            android:textSize="@dimen/title_size" />
-
         <EditText
             android:id="@+id/emailEditText"
             android:layout_marginTop="@dimen/form_element_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/loginTitle"
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress" />
 
