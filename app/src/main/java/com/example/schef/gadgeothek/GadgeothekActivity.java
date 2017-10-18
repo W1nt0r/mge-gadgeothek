@@ -25,6 +25,10 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gadgeothek);
         ((BottomNavigationView) findViewById(R.id.gadgeothekActivityBottomNavi)).setOnNavigationItemSelectedListener(this);
@@ -70,7 +74,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void testLogin(final Fragment fragment, final Bundle args) {
-        LibraryService.login("test@test.tes", "test", new Callback<Boolean>() {
+        LibraryService.login("m@hsr.ch", "12345", new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean input) {
                 Log.d(getString(R.string.app_name), "Successfully made a test login!");
@@ -102,8 +106,9 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
                 showFragment(new GadgetListFragment(), null);
                 return true;
             case R.id.action_reservations:
-                return true;
+                showFragment(new ReservationManagerFragment(), null);
             case R.id.action_loans:
+                showFragment(new LoanFragment(), null);
                 return true;
             case R.id.action_server:
                 return true;
