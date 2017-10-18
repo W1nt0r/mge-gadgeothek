@@ -60,7 +60,12 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
             public void onCompletion(Boolean input) {
                 if(Constants.DEV) Log.d(getString(R.string.app_name), "Reservation state: " + input);
 
-                Toast.makeText(getActivity(), "Reservierung erfolgreich durchgeführt", Toast.LENGTH_SHORT).show();
+                if(input) {
+                    Toast.makeText(getActivity(), "Reservierung erfolgreich durchgeführt", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Reservierung konnte nicht durchgeführt werden", Toast.LENGTH_LONG).show();
+                }
+
 
                 ((View.OnClickListener) activity).onClick(view);
             }
