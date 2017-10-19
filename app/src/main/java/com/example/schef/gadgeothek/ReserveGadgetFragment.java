@@ -4,6 +4,7 @@ package com.example.schef.gadgeothek;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,8 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
 
         displayedGadget = (Gadget) getArguments().getSerializable(Constants.GADGET_ARGS);
 
-        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
+        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.reserve_gadget_title));
 
         if(Constants.DEV) {
             LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");

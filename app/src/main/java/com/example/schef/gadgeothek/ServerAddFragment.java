@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,8 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_add, container, false);
 
-        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_add_title));
+        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_add_title));
+        ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_add_title));
 
         db = DBService.getDBService(null).getWritableDatabase();
         System.out.println(db);

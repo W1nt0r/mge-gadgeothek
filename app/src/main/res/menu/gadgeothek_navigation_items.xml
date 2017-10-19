@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_gadgets"
-        android:title="Gadgets"
+        android:title="@string/menu_gadgets_title"
         android:icon="@drawable/ic_laptop_chromebook_black_24dp"/>
     <item android:id="@+id/action_reservations"
-        android:title="Reservierungen"
+        android:title="@string/menu_reservations_title"
         android:icon="@drawable/ic_watch_later_black_24dp"/>
     <item android:id="@+id/action_loans"
-        android:title="Ausleihe"
+        android:title="@string/menu_loans_title"
         android:icon="@drawable/ic_playlist_add_check_black_24dp"/>
     <item android:id="@+id/action_server"
-        android:title="Server"
+        android:title="@string/menu_server_title"
         android:icon="@drawable/ic_storage_black_24dp"/>
 </menu>

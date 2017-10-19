@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -80,7 +81,8 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
 
-        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
+        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
+        ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_choose));
 
         serverView = rootView.findViewById(R.id.serverView);
         loadingView = rootView.findViewById(R.id.loadingView);

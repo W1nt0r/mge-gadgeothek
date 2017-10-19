@@ -3,6 +3,7 @@ package com.example.schef.gadgeothek;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -45,7 +46,8 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
             errorView.setVisibility(View.GONE);
             loadingView.setVisibility(View.VISIBLE);
 
-            ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
+            //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
 
             LibraryService.getReservationsForCustomer(new Callback<List<Reservation>>() {
                 @Override

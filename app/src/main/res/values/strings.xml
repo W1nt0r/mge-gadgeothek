@@ -37,4 +37,12 @@
     <string name="reserve_gadget_title">Gadget Reservation</string>
 
     <string name="no_loans">Keine Ausleihen gefunden</string>
+
+    <!-- Menus -->
+    <string name="menu_logout_title">Logout</string>
+
+    <string name="menu_gadgets_title">Gadgets</string>
+    <string name="menu_reservations_title">Reservierungen</string>
+    <string name="menu_loans_title">Ausleihe</string>
+    <string name="menu_server_title">Server</string>
 </resources>

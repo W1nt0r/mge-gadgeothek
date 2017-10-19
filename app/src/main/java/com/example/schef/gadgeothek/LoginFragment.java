@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mail = (EditText) root.findViewById(R.id.emailEditText);
         password = (EditText) root.findViewById(R.id.passwordEditText);
 
-        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
+        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.login_title));
 
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
         if (connectionData != null && connectionData.getCustomermail() != null && connectionData.getPassword() != null) {

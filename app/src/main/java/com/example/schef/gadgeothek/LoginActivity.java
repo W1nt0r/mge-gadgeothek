@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.schef.domain.ConnectionData;
@@ -29,6 +30,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE).edit().clear().apply();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //getSupportActionBar().setIcon(R.drawable.logo_toolbar);
 
         db = DBService.getDBService(this);
         ConnectionData connectionData = db.getCurrentConnection(this);
