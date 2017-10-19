@@ -1,6 +1,7 @@
 package com.example.schef.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,6 +25,8 @@ public class DBService extends SQLiteOpenHelper {
     private static final String GET_CONNECTIONS = "select * from connectiondata;";
     private static final String GET_CURRENT_CONNECTION = "select * from connectiondata where id = [ID];";
     private static final String UPDATE_CONNECTION = "update connectiondata set customermail = [CUSTOMERMAIL], password = [PASSWORD] where id = [ID];";
+    private static final String REMOVE_CONNECTION = "delete from connectiondata where id = [ID];";
+    private static final String GET_CONNECTION_BY_SERVER_NAME = ";";
 
     private DBService(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -80,14 +83,15 @@ public class DBService extends SQLiteOpenHelper {
         }
     }
 
-    public boolean removeConnection(int id) {
-    /*    String query =
+    public void removeConnection(int id) {
+        String query = REMOVE_CONNECTION;
+        query = query.replace("[ID]", Integer.toString(id));
         SQLiteDatabase wdb = instance.getWritableDatabase();
         wdb.beginTransaction();
         wdb.execSQL(query);
         wdb.setTransactionSuccessful();
-        wdb.endTransaction();*/
-        return true;
+        wdb.endTransaction();
+        return;
     }
 
     public List<ConnectionData> getConnections() {
@@ -120,27 +124,28 @@ public class DBService extends SQLiteOpenHelper {
             serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
             connections.add(new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail));
         }
-        while(resultSet.moveToNext());
+        while (resultSet.moveToNext());
 
         return connections;
     }
 
-    public void updateConnection(int id, String customermail, String password){
+    public void updateConnection(int id, String customermail, String password) {
         String query = UPDATE_CONNECTION;
 
-        customermail = (customermail == null)?"null":"'"+customermail+"'";
-        password = (password == null)?"null":"'" + password + "'";
+        customermail = (customermail == null) ? "null" : "'" + customermail + "'";
+        password = (password == null) ? "null" : "'" + password + "'";
 
         query = query.replace("[ID]", Integer.toString(id));
         query = query.replace("[CUSTOMERMAIL]", customermail);
         query = query.replace("[PASSWORD]", password);
 
-        try{
+        try {
             SQLiteDatabase wdb = instance.getWritableDatabase();
             wdb.beginTransaction();
             wdb.execSQL(query);
             wdb.setTransactionSuccessful();
             wdb.endTransaction();
+
         } catch (Exception ex) {
             throw ex;
         }
