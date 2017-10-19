@@ -42,7 +42,9 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setIcon(R.drawable.logo_toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_logo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         connectionData = (ConnectionData)getIntent().getSerializableExtra(Constants.CONNECTIONDATA_ARGS);
 
