@@ -18,7 +18,7 @@ import com.example.schef.service.LibraryService;
 
 import java.util.Stack;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginHandler {
+public class LoginActivity extends AppCompatActivity implements LoginHandler, ServerChanger {
     private Stack<State> stateStack = new Stack<>();
     private DBService db;
 
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE).edit().clear().apply();
+        //getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE).edit().clear().apply();
 
         db = DBService.getDBService(this);
         ConnectionData connectionData = db.getCurrentConnection(this);
@@ -37,19 +37,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Bundle args = new Bundle();
         args.putSerializable(Constants.CONNECTIONDATA_ARGS, connectionData);
         showFragment(new ServerManageFragment(), args);
-    }
-
-    public void onClick(View view) {
-        switch (stateStack.peek()) {
-            case SERVER_MANAGE:
-                stateStack.push(State.SERVER_ADD);
-                showFragment(new ServerAddFragment(), null);
-                break;
-            case SERVER_ADD:
-                stateStack.push(State.SERVER_MANAGE);
-                showFragment(new ServerManageFragment(), null);
-                break;
-        }
     }
 
     private void showFragment(Fragment fragment, Bundle args) {
@@ -77,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void login(ConnectionData connectionData) {
         db.updateConnection(connectionData.getId(), connectionData.getCustomermail(), connectionData.getPassword());
         Intent intent = new Intent(this, GadgeothekActivity.class);
+        intent.putExtra(Constants.CONNECTIONDATA_ARGS, connectionData);
         startActivity(intent);
     }
 
@@ -92,6 +80,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         stateStack.push(State.LOGIN);
         showFragment(new LoginFragment(), args);
     }
+
+    @Override
+    public void addServer() {
+        stateStack.push(State.SERVER_ADD);
+        showFragment(new ServerAddFragment(), null);
+    }
+
+    @Override
+    public void addNewServer() {
+        stateStack.push(State.SERVER_MANAGE);
+        showFragment(new ServerManageFragment(), null);
+    }
+
 
     @Override
     public void registerClick(ConnectionData connectionData) {

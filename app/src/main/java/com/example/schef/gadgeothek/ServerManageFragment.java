@@ -34,6 +34,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     private DBService db;
     private View serverView;
     private View loadingView;
+    private int currentConnection;
 
     private List<ConnectionData> getServers() {
         List<ConnectionData> serverList = db.getConnections();
@@ -41,6 +42,12 @@ public class ServerManageFragment extends Fragment implements ServerManager {
             Collections.sort(serverList, new Comparator<ConnectionData>() {
                 @Override
                 public int compare(ConnectionData c1, ConnectionData c2) {
+                    if (currentConnection >= 0) {
+                        if (c1.getId() == currentConnection)
+                            return -1;
+                        if (c2.getId() == currentConnection)
+                            return 1;
+                    }
                     return c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase());
                 }
             });
@@ -58,7 +65,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
             rootView.findViewById(R.id.serverRecyclerView).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.noServer).setVisibility(View.GONE);
 
-            ServerListAdapter serverListAdapter = new ServerListAdapter(servers, this);
+            ServerListAdapter serverListAdapter = new ServerListAdapter(servers, this, currentConnection, getActivity());
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
             RecyclerView recyclerView = rootView.findViewById(R.id.serverRecyclerView);
@@ -84,21 +91,28 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         serverView = rootView.findViewById(R.id.serverView);
         loadingView = rootView.findViewById(R.id.loadingView);
+        currentConnection = -1;
         if (getArguments() == null) {
             updateServerList();
         } else {
-            ConnectionData connectionData = (ConnectionData)getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
-            if (connectionData != null) {
-                chooseServer(connectionData);
-            } else {
+            ConnectionData loginData = (ConnectionData)getArguments().getSerializable(Constants.LOGINDATA_ARGS);
+            if (loginData != null) {
+                currentConnection = loginData.getId();
                 updateServerList();
+            } else {
+                ConnectionData connectionData = (ConnectionData)getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
+                if (connectionData != null) {
+                    chooseServer(connectionData);
+                } else {
+                    updateServerList();
+                }
             }
         }
         FloatingActionButton addButton = rootView.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((View.OnClickListener)activity).onClick(view);
+                ((ServerChanger)activity).addServer();
             }
         });
 
@@ -106,7 +120,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     }
 
     private void onAttachHelper(Context context) {
-        if (context instanceof LoginHandler && context instanceof View.OnClickListener) {
+        if (context instanceof ServerChanger) {
             db = DBService.getDBService(null);
             activity = (Activity)context;
         } else {
@@ -139,7 +153,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         LibraryService.checkGadgeothekServerAddress(connectionData.getUri(), new Callback<List<Gadget>>() {
             @Override
             public void onCompletion(List<Gadget> input) {
-                ((LoginHandler)activity).changeServer(connectionData);
+                ((ServerChanger)activity).changeServer(connectionData);
             }
 
             @Override

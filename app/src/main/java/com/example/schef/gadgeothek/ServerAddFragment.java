@@ -53,10 +53,10 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
     }
 
     private void onAttachHelper(Context context) {
-        if (context instanceof View.OnClickListener) {
+        if (context instanceof ServerChanger) {
             activity = (Activity)context;
         } else {
-            throw new AssertionError("Activity must implement interface FrameChanger");
+            throw new AssertionError("Activity must implement interface ServerChanger");
         }
     }
 
@@ -103,7 +103,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
                         db.execSQL("INSERT INTO connectiondata(servername, serveraddress) VALUES(?, ?)", new String[]{ name, address });
                         Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_added, name), Toast.LENGTH_SHORT);
                         toast.show();
-                        ((View.OnClickListener)activity).onClick(view);
+                        ((ServerChanger)activity).addNewServer();
                     }
 
                     @Override
