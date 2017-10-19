@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +44,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         registerButton.setOnClickListener(this);
         mail = (EditText) root.findViewById(R.id.emailEditText);
         password = (EditText) root.findViewById(R.id.passwordEditText);
+        connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.login_title));
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            if (getArguments() != null && connectionData != null) {
+                actionBar.setTitle(getString(R.string.login_title_server, connectionData.getName()));
+            } else {
+                actionBar.setTitle(getString(R.string.login_title_server));
+            }
+        }
 
-        connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
         if (connectionData != null && connectionData.getCustomermail() != null && connectionData.getPassword() != null) {
             mail.setText(connectionData.getCustomermail());
             password.setText(connectionData.getPassword());

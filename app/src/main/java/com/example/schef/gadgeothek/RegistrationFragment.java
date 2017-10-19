@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,10 +49,15 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         passwordRepField = (EditText) root.findViewById(R.id.passwordRepField);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.reserve_gadget_title));
-
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
-
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            if (getArguments() != null && connectionData != null) {
+                actionBar.setTitle(getString(R.string.registration_title_server, connectionData.getName()));
+            } else {
+                actionBar.setTitle(getString(R.string.registration_title));
+            }
+        }
         return root;
     }
 

@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">Gadgeothek</string>
 
+    <string name="gadgeothek_title_server">Gadgeothek - %1$s</string>
+    <string name="gadgeothek_title">Gadgeothek</string>
+
     <string name="email_hint">email-address</string>
     <string name="password_hint">password</string>
+    <string name="login_title_server">Login - %1$s</string>
     <string name="login_title">Login</string>
     <string name="login">login</string>
+    <string name="registration_title_server">Registration - %1$s</string>
     <string name="registration_title">Registration</string>
     <string name="name_hint">Name</string>
     <string name="matrikel_hint">Matrikel-Nr</string>
@@ -26,7 +31,7 @@
 
     <string name="no_reservation">Keine Reservationen vorhanden.\nGehen Sie zu den Gadgets, um eine Reservation zu machen</string>
     <string name="reservation_date">Reserviert am %1$s</string>
-    <string name="reservation_loading">Daten werden geladen&#8230;</string>
+    <string name="reservation_loading">Reservationen werden geladen&#8230;</string>
     <string name="reservation_deleting">Reservation wird gelöscht&#8230;</string>
     <string name="reservation_deleted">Reservation gelöscht</string>
     <string name="reservation_deleting_fail">Löschen fehlgeschlagen</string>
@@ -37,6 +42,7 @@
     <string name="reserve_gadget_title">Gadget Reservation</string>
 
     <string name="no_loans">Keine Ausleihen gefunden</string>
+    <string name="loans_loading">Ausleihen werden geladen</string>
 
     <!-- Menus -->
     <string name="menu_logout_title">Logout</string>
