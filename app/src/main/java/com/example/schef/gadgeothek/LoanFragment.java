@@ -5,15 +5,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.example.schef.domain.Gadget;
 import com.example.schef.domain.Loan;
 import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -21,7 +23,9 @@ import java.util.List;
 
 public class LoanFragment extends Fragment {
     private View root;
-    private List<Gadget> gadgets;
+    private LinearLayout errorView;
+    private LinearLayout loadingView;
+    private TextView noLoansView;
 
     @Override
     public void onAttach(Context context) {
@@ -32,16 +36,42 @@ public class LoanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_loan, container, false);
+        errorView = root.findViewById(R.id.loanError);
+        loadingView = root.findViewById(R.id.loanLoading);
+        noLoansView = root.findViewById(R.id.no_loans);
+        stateLoading();
         loadLoans();
         return root;
+    }
+
+    private void stateLoading(){
+        errorView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
+        noLoansView.setVisibility(View.GONE);
+    }
+
+    private void stateError(String message){
+        errorView.setVisibility(View.VISIBLE);
+        ((TextView)root.findViewById(R.id.errorText)).setText(message);
+        loadingView.setVisibility(View.GONE);
+        noLoansView.setVisibility(View.GONE);
+    }
+
+    private void stateSuccessful(){
+        errorView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        noLoansView.setVisibility(View.GONE);
+    }
+
+    private void stateNoResults(){
+        errorView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        noLoansView.setVisibility(View.VISIBLE);
     }
 
     private void loadLoans() {
         if (LibraryService.isLoggedIn()) {
             root.findViewById(R.id.loanListRecyclerView).setVisibility(View.GONE);
-            root.findViewById(R.id.no_loans).setVisibility(View.GONE);
-            root.findViewById(R.id.loading).setVisibility(View.VISIBLE);
-
             LibraryService.getLoansForCustomer(new Callback<List<Loan>>() {
                 @Override
                 public void onCompletion(List<Loan> input) {
@@ -58,29 +88,26 @@ public class LoanFragment extends Fragment {
                             return 0;
                         }
                     });
-                    showLoans(input, gadgets);
+                    showLoans(input);
                 }
 
                 @Override
                 public void onError(String message) {
-                    Toast.makeText(getActivity().getBaseContext(), "Unable to retrieve Reservations. Please consult your local Meiershark", Toast.LENGTH_LONG).show();
+                    stateError("Fehler beim laden der Daten.\n Stellen Sie sicher, dass sie mit dem Internet verbunden sind.");
+                    Log.d(getString(R.string.app_name), "Unable to retrieve loans");
                 }
             });
 
         }
     }
 
-    private void showLoans(List<Loan> loans, List<Gadget> gadgets) {
+    private void showLoans(List<Loan> loans) {
         if (loans.size() == 0) {
-            root.findViewById(R.id.loanListRecyclerView).setVisibility(View.GONE);
-            root.findViewById(R.id.loading).setVisibility(View.GONE);
-            root.findViewById(R.id.no_loans).setVisibility(View.VISIBLE);
+            stateNoResults();
         } else {
+            stateSuccessful();
             RecyclerView loanView = root.findViewById(R.id.loanListRecyclerView);
             loanView.setVisibility(View.VISIBLE);
-            root.findViewById(R.id.loading).setVisibility(View.GONE);
-            root.findViewById(R.id.no_loans).setVisibility(View.GONE);
-
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             LoanListAdapter adapter = new LoanListAdapter(loans);
 

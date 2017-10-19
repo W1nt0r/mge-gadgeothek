@@ -18,13 +18,13 @@
             android:gravity="center"
             android:text="@string/no_loans"
             android:visibility="visible"/>
-        <TextView
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/server_loading"
-            android:visibility="visible"/>
+        <include layout="@layout/error_view"
+            android:id="@+id/loanError"
+            android:visibility="gone" />
+        <include layout="@layout/fragment_loading"
+            android:id="@+id/loanLoading"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </LinearLayout>

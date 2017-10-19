@@ -35,7 +35,7 @@ public class LoanListAdapter extends  RecyclerView.Adapter<LoanListAdapter.ViewH
 
     public LoanListAdapter(List<Loan> loans){
         this.loans = loans;
-        this.format = new SimpleDateFormat("EEE, d  MMM  yyyy");
+        this.format = new SimpleDateFormat("d.MMM yyyy");
     }
 
     @Override
