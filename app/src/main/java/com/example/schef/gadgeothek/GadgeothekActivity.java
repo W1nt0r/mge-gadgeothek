@@ -42,18 +42,16 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setIcon(R.drawable.logo_toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_logo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         connectionData = (ConnectionData)getIntent().getSerializableExtra(Constants.CONNECTIONDATA_ARGS);
 
         stateStack.push(State.GADGET_LIST);
-        showFragment(new GadgetListFragment(), null);
-        /*if (Constants.DEV) {
-            LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
-            testLogin(new GadgetListFragment(), null);
-        } else {
-            showFragment(new GadgetListFragment(), null);
-        }*/
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
+        showFragment(new GadgetListFragment(), args);
     }
 
     @Override
@@ -77,7 +75,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences settings = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE);
         int server = settings.getInt(Constants.CONNECTIONDATA_ARGS, Constants.NO_SERVER_CHOSEN);
 
-        db.updateConnection(server, "null", "null");
+        db.updateConnection(server, null, null);
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -127,19 +125,19 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
         switch (item.getItemId()) {
             case R.id.action_gadgets:
-                showFragment(new GadgetListFragment(), null);
+                showFragment(new GadgetListFragment(), args);
                 return true;
             case R.id.action_reservations:
-                showFragment(new ReservationManagerFragment(), null);
+                showFragment(new ReservationManagerFragment(), args);
                 return true;
             case R.id.action_loans:
-                showFragment(new LoanFragment(), null);
+                showFragment(new LoanFragment(), args);
                 return true;
             case R.id.action_server:
-                Bundle args = new Bundle();
-                args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
                 showFragment(new ServerManageFragment(), args);
                 return true;
             default:

@@ -33,7 +33,9 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setIcon(R.drawable.logo_toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_logo);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         db = DBService.getDBService(this);
         ConnectionData connectionData = db.getCurrentConnection(this);

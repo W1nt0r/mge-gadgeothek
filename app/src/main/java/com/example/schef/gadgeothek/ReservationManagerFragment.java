@@ -3,6 +3,7 @@ package com.example.schef.gadgeothek;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.schef.domain.ConnectionData;
+import com.example.schef.domain.Constants;
 import com.example.schef.domain.Reservation;
 import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
@@ -47,7 +50,17 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
             loadingView.setVisibility(View.VISIBLE);
 
             //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                if (getArguments() != null) {
+                    ConnectionData connectionData = (ConnectionData) getArguments().getSerializable(Constants.LOGINDATA_ARGS);
+                    if (connectionData != null) {
+                        actionBar.setTitle(getString(R.string.gadgeothek_title_server, connectionData.getName()));
+                    }
+                } else {
+                    actionBar.setTitle(getString(R.string.gadgeothek_title));
+                }
+            }
 
             LibraryService.getReservationsForCustomer(new Callback<List<Reservation>>() {
                 @Override

@@ -3,6 +3,8 @@ package com.example.schef.gadgeothek;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.schef.domain.ConnectionData;
+import com.example.schef.domain.Constants;
 import com.example.schef.domain.Loan;
 import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
@@ -26,6 +30,7 @@ public class LoanFragment extends Fragment {
     private LinearLayout errorView;
     private LinearLayout loadingView;
     private TextView noLoansView;
+    private TextView loadingText;
 
     @Override
     public void onAttach(Context context) {
@@ -38,7 +43,22 @@ public class LoanFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_loan, container, false);
         errorView = root.findViewById(R.id.loanError);
         loadingView = root.findViewById(R.id.loanLoading);
+        loadingText = root.findViewById(R.id.loadingText);
         noLoansView = root.findViewById(R.id.no_loans);
+        loadingText.setText(R.string.loans_loading);
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            if (getArguments() != null) {
+                ConnectionData connectionData = (ConnectionData) getArguments().getSerializable(Constants.LOGINDATA_ARGS);
+                if (connectionData != null) {
+                    actionBar.setTitle(getString(R.string.gadgeothek_title_server, connectionData.getName()));
+                }
+            } else {
+                actionBar.setTitle(getString(R.string.gadgeothek_title));
+            }
+        }
+
         stateLoading();
         loadLoans();
         return root;

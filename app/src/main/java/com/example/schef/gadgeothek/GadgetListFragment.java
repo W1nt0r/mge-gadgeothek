@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,17 @@ public class GadgetListFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_gadget_list, container, false);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            if (getArguments() != null) {
+                ConnectionData connectionData = (ConnectionData) getArguments().getSerializable(Constants.LOGINDATA_ARGS);
+                if (connectionData != null) {
+                    actionBar.setTitle(getString(R.string.gadgeothek_title_server, connectionData.getName()));
+                }
+            } else {
+                actionBar.setTitle(getString(R.string.gadgeothek_title));
+            }
+        }
 
         if(Constants.DEV) {
             LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");

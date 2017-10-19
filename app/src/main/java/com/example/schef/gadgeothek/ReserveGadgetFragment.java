@@ -1,6 +1,7 @@
 package com.example.schef.gadgeothek;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -31,12 +32,7 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
 
         displayedGadget = (Gadget) getArguments().getSerializable(Constants.GADGET_ARGS);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.reserve_gadget_title));
-
-        if(Constants.DEV) {
-            LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
-        }
 
         setupDisplayedGadget();
 
@@ -45,14 +41,29 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
         return root;
     }
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
+    public void onAttachHelper(Context activity) {
         if (activity instanceof View.OnClickListener) {
             this.activity = activity;
         } else {
             throw new AssertionError("Activity must implement interface View.OnClickListener");
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onAttachHelper(context);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override
@@ -67,7 +78,6 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
                 } else {
                     Toast.makeText(getActivity(), "Reservierung konnte nicht durchgeführt werden", Toast.LENGTH_LONG).show();
                 }
-
 
                 ((View.OnClickListener) activity).onClick(view);
             }
