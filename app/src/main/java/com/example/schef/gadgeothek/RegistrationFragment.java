@@ -1,6 +1,8 @@
 package com.example.schef.gadgeothek;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,9 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.schef.domain.ConnectionData;
 import com.example.schef.domain.Constants;
 import com.example.schef.service.Callback;
-import com.example.schef.service.DBService;
 import com.example.schef.service.LibraryService;
 
 import java.util.ArrayList;
@@ -24,13 +26,13 @@ import java.util.List;
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
     private View root;
+    private LoginHandler activity;
     private EditText nameField;
     private EditText mailField;
     private EditText matrikelField;
     private EditText passwordField;
     private EditText passwordRepField;
-    private String serverAddress;
-    private SQLiteDatabase db;
+    private ConnectionData connectionData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,29 +48,44 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
 
-        if(Constants.DEV) {
-            serverAddress = "http://mge1.dev.ifs.hsr.ch/public";
-        } else {
-            db = DBService.getDBService(null).getReadableDatabase();
-
-            db.beginTransaction();
-            Cursor rSet = db.rawQuery("select serveraddress from connectiondata where id = (select connectiondataid from currentconnection where name = 'current');", null);
-            rSet.moveToFirst();
-            serverAddress = rSet.getString(0);
-            db.endTransaction();
-        }
+        connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
 
         return root;
+    }
+
+    private void onAttachHelper(Context context) {
+        if(context instanceof LoginHandler) {
+            activity = (LoginHandler) context;
+        } else {
+            throw new AssertionError("Activity must implement interface LoginHandler");
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onAttachHelper(context);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override
     public void onClick(View view) {
         showLoadingScreen();
-        String name = nameField.getText().toString();
-        String mail = mailField.getText().toString();
-        String matrikelnr = matrikelField.getText().toString();
-        String password = passwordField.getText().toString();
-        String passwordRep = passwordRepField.getText().toString();
+        final String name = nameField.getText().toString();
+        final String mail = mailField.getText().toString();
+        final String matrikelnr = matrikelField.getText().toString();
+        final String password = passwordField.getText().toString();
+        final String passwordRep = passwordRepField.getText().toString();
 
         if(name.equals("")) nameField.setError("Namens-Feld ist leer");
 
@@ -82,30 +99,31 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         if(!password.equals(passwordRep)) passwordRepField.setError("Die eingegebenen Passwörter stimmen nicht miteinander überein");
 
-        if (serverAddress != null) {
-            LibraryService.setServerAddress(serverAddress);
-            LibraryService.register(mail, password, name, matrikelnr, new Callback<Boolean>() {
-                @Override
-                public void onCompletion(Boolean input) {
-                    //insert into db, return to other fragment
-                    if(Constants.DEV) Log.d(getString(R.string.app_name), "Registration State: " + input);
+        LibraryService.register(mail, password, name, matrikelnr, new Callback<Boolean>() {
+            @Override
+            public void onCompletion(Boolean input) {
+                //insert into db, return to other fragment
+                if(Constants.DEV) Log.d(getString(R.string.app_name), "Registration State: " + input);
 
+                if(input) {
                     Toast.makeText(getActivity(), "Die Registierung wurde erfolgreich durchgeführt", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Die Registierung konnte nicht erfolgreich durchgeführt werden", Toast.LENGTH_SHORT).show();
                 }
 
-                @Override
-                public void onError(String message) {
-                    if(Constants.DEV) Log.d(getString(R.string.app_name), message);
-                    String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
+                connectionData.setCustomermail(mail);
+                connectionData.setPassword(password);
+                activity.register(connectionData);
+            }
 
-                    Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
-                }
-            });
-        } else {
-            String errmsg = "Die Serveradresse konnte nicht richtig gelesen werden, bitte melden Sie sich bei der zuständigen Stelle";
-            Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
-        }
+            @Override
+            public void onError(String message) {
+                if(Constants.DEV) Log.d(getString(R.string.app_name), message);
+                String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
 
+                Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void showLoadingScreen() {

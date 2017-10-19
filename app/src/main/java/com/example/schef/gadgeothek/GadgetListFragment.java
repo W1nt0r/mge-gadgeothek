@@ -1,6 +1,7 @@
 package com.example.schef.gadgeothek;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -28,7 +29,7 @@ import java.util.List;
 public class GadgetListFragment extends Fragment {
 
     private View root;
-    private Context activity;
+    private GadgetItemListener activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,14 +47,29 @@ public class GadgetListFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        if (activity instanceof GadgetItemListener) {
-            this.activity = activity;
+    private void onAttachHelper(Context context) {
+        if(context instanceof GadgetItemListener) {
+            activity = (GadgetItemListener) context;
         } else {
             throw new AssertionError("Activity must implement interface GadgetItemListener");
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onAttachHelper(context);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     private void setup() {
@@ -79,16 +95,12 @@ public class GadgetListFragment extends Fragment {
                 if(Constants.DEV) Log.d(getString(R.string.app_name), "Failed with message: " + message);
 
                 showError();
-
-                String errmsg = "Es konnten keine Gadgets vom Server geholt werden. Bitte versuchen Sie es später noch einmal";
-
-                Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void showLoadingScreen() {
-        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
+        root.findViewById(R.id.errorView).setVisibility(View.GONE);
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
 
@@ -99,9 +111,8 @@ public class GadgetListFragment extends Fragment {
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.GONE);
 
-        TextView placeholderTextView = root.findViewById(R.id.noGadgets);
-        placeholderTextView.setText("Keine Gadgets gefunden");
-        placeholderTextView.setVisibility(View.VISIBLE);
+        ((TextView) root.findViewById(R.id.errorText)).setText("Keine Gadgets gefunden");
+        root.findViewById(R.id.errorView).setVisibility(View.VISIBLE);
     }
 
     private void showRecyclerView() {
@@ -115,7 +126,7 @@ public class GadgetListFragment extends Fragment {
             RecyclerView gadgetListView = root.findViewById(R.id.gadgetlistRecyclerView);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            GadgetListAdapter adapter = new GadgetListAdapter(gadgetList, (GadgetItemListener) activity);
+            GadgetListAdapter adapter = new GadgetListAdapter(gadgetList, activity);
 
             gadgetListView.setLayoutManager(layoutManager);
             gadgetListView.setAdapter(adapter);

@@ -1,5 +1,6 @@
 package com.example.schef.gadgeothek;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -41,15 +42,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         registerButton.setOnClickListener(this);
         mail = (EditText) root.findViewById(R.id.emailEditText);
         password = (EditText) root.findViewById(R.id.passwordEditText);
-        db = DBService.getDBService(null);
+
+        ((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
 
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
-
         if (connectionData != null && connectionData.getCustomermail() != null && connectionData.getPassword() != null) {
             mail.setText(connectionData.getCustomermail());
             password.setText(connectionData.getPassword());
             login();
+        } else {
+            loadingView.setVisibility(View.GONE);
+            loginView.setVisibility(View.VISIBLE);
         }
+
         return root;
     }
 
@@ -67,6 +72,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     connectionData.setCustomermail(email);
                     ((LoginHandler) activity).login(connectionData);
                 } else {
+                    loadingView.setVisibility(View.GONE);
+                    loginView.setVisibility(View.VISIBLE);
                     Toast toast = Toast.makeText(getActivity().getBaseContext(), "Wrong password or username", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -82,14 +89,30 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
+    private void onAttachHelper(Context activity) {
         if (activity instanceof LoginHandler && activity instanceof View.OnClickListener) {
             this.activity = (View.OnClickListener) activity;
+            db = DBService.getDBService(null);
         } else {
             throw new AssertionError("Activity must implement View.OnClickListener!");
         }
+    }
+
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
+    }
+
+    /**
+     * Needed because of Android SDK 21
+     * @param activity
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onAttachHelper(activity);
     }
 
     @Override
