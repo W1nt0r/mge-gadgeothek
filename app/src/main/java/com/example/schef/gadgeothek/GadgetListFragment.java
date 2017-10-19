@@ -95,16 +95,12 @@ public class GadgetListFragment extends Fragment {
                 if(Constants.DEV) Log.d(getString(R.string.app_name), "Failed with message: " + message);
 
                 showError();
-
-                String errmsg = "Es konnten keine Gadgets vom Server geholt werden. Bitte versuchen Sie es später noch einmal";
-
-                Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void showLoadingScreen() {
-        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
+        root.findViewById(R.id.errorView).setVisibility(View.GONE);
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
 
@@ -115,9 +111,8 @@ public class GadgetListFragment extends Fragment {
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.GONE);
 
-        TextView placeholderTextView = root.findViewById(R.id.noGadgets);
-        placeholderTextView.setText("Keine Gadgets gefunden");
-        placeholderTextView.setVisibility(View.VISIBLE);
+        ((TextView) root.findViewById(R.id.errorText)).setText("Keine Gadgets gefunden");
+        root.findViewById(R.id.errorView).setVisibility(View.VISIBLE);
     }
 
     private void showRecyclerView() {
