@@ -20,7 +20,7 @@ import com.example.schef.service.DBService;
 import com.example.schef.service.LibraryService;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
-    private View.OnClickListener activity;
+    private ServerChanger activity;
     private EditText mail;
     private EditText password;
     private ConnectionData connectionData;
@@ -92,11 +92,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onAttachHelper(Context activity) {
-        if (activity instanceof LoginHandler && activity instanceof View.OnClickListener) {
-            this.activity = (View.OnClickListener) activity;
+        if (activity instanceof LoginHandler) {
+            this.activity = (ServerChanger)activity;
             db = DBService.getDBService(null);
         } else {
-            throw new AssertionError("Activity must implement View.OnClickListener!");
+            throw new AssertionError("Activity must implement LoginHandler!");
         }
     }
 

@@ -1,5 +1,9 @@
 package com.example.schef.gadgeothek;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,8 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
 
     private List<ConnectionData> servers;
     private ServerManager serverManager;
+    private int currentConnection;
+    private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,9 +39,11 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
 
     }
 
-    public ServerListAdapter(List<ConnectionData> servers, ServerManager serverManager) {
+    public ServerListAdapter(List<ConnectionData> servers, ServerManager serverManager, int currentConnection, Context context) {
         this.serverManager = serverManager;
         this.servers = servers;
+        this.currentConnection = currentConnection;
+        this.context = context;
     }
 
     @Override
@@ -49,22 +57,44 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
         return new ViewHolder(v, serverName, serverUri, serverDelete);
     }
 
+    private int getColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getColor(color);
+
+        } else {
+            //noinspection deprecation
+            return context.getResources().getColor(color);
+        }
+    }
+
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ConnectionData server = servers.get(position);
         holder.serverName.setText(server.getName());
         holder.serverUri.setText(server.getUri());
-        holder.parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                serverManager.chooseServer(server);
-            }
-        });
-        holder.serverDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                serverManager.deleteServer(server);
-            }
-        });
+        if (server.getId() == currentConnection) {
+            holder.serverDelete.setVisibility(View.GONE);
+            holder.parent.setBackgroundColor(getColor(R.color.colorAccent));
+            holder.serverUri.setTextColor(getColor(R.color.colorFontAccentShadowed));
+            holder.serverName.setTextColor(getColor(R.color.colorFontAccent));
+            holder.parent.setOnClickListener(null);
+        } else {
+            holder.serverDelete.setVisibility(View.VISIBLE);
+            holder.parent.setBackgroundColor(getColor(R.color.colorBackgroundNormal));
+            holder.serverUri.setTextColor(getColor(R.color.colorFontNormalShadowed));
+            holder.serverName.setTextColor(getColor(R.color.colorFontNormal));
+            holder.parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    serverManager.chooseServer(server);
+                }
+            });
+            holder.serverDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    serverManager.deleteServer(server);
+                }
+            });
+        }
     }
 
     public int getItemCount() {

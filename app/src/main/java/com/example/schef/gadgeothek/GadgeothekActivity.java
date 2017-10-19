@@ -25,11 +25,11 @@ import com.example.schef.service.LibraryService;
 
 import java.util.Stack;
 
-public class GadgeothekActivity extends AppCompatActivity implements View.OnClickListener, GadgetItemListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class GadgeothekActivity extends AppCompatActivity implements View.OnClickListener, GadgetItemListener, BottomNavigationView.OnNavigationItemSelectedListener, ServerChanger {
 
     private Stack<State> stateStack = new Stack<>();
-    //private ConnectionData connectionData;
     private DBService db;
+    private ConnectionData connectionData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setIcon(R.drawable.logo_toolbar);
+
+        connectionData = (ConnectionData)getIntent().getSerializableExtra(Constants.CONNECTIONDATA_ARGS);
 
         stateStack.push(State.GADGET_LIST);
         showFragment(new GadgetListFragment(), null);
@@ -72,12 +74,6 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void logout() {
-        /*connectionData.setPassword(null);
-        connectionData.setCustomermail(null);
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(Constants.CONNECTIONDATA_ARGS, connectionData);
-        startActivity(intent);*/
         SharedPreferences settings = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE);
         int server = settings.getInt(Constants.CONNECTIONDATA_ARGS, Constants.NO_SERVER_CHOSEN);
 
@@ -139,11 +135,40 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
                 showFragment(new ReservationManagerFragment(), null);
                 return true;
             case R.id.action_loans:
+                showFragment(new LoanFragment(), null);
                 return true;
             case R.id.action_server:
+                Bundle args = new Bundle();
+                args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
+                showFragment(new ServerManageFragment(), args);
                 return true;
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void changeServer(ConnectionData connectionData) {
+        SharedPreferences settings = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(Constants.CONNECTIONDATA_ARGS, connectionData.getId());
+        editor.apply();
+        Intent loginActivity = new Intent(this, LoginActivity.class);
+        startActivity(loginActivity);
+    }
+
+    @Override
+    public void addServer() {
+        stateStack.push(State.SERVER_ADD);
+        showFragment(new ServerAddFragment(), null);
+    }
+
+    @Override
+    public void addNewServer() {
+        stateStack.push(State.SERVER_MANAGE);
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
+        System.out.println(connectionData.getId());
+        showFragment(new ServerManageFragment(), args);
     }
 }
