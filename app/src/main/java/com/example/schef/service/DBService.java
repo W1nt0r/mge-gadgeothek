@@ -20,13 +20,14 @@ public class DBService extends SQLiteOpenHelper {
     private static final int DB_VERSION = 2;
     private static DBService instance;
 
-    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid varchar(200), password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) not null);";
-    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('TOKEN', 'CUSTOMERID', 'PASSWORD', 'CUSTOMERMAIL', 'SERVERNAME', 'SERVERADDRESS');";
+    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid varchar(200), password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) unique not null);";
+    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('%s', '%s', '%s', '%s', '%s', '%s');";
     private static final String GET_CONNECTIONS = "select * from connectiondata;";
+    private static final String GET_CONNECTION_BY_SERVERNAME = "select * from connectiondata where servername = '%s';";
+    private static final String GET_CONNECTION_BY_SERVERURI = "Select * from connectiondata where serveraddress = '%s';";
     private static final String GET_CURRENT_CONNECTION = "select * from connectiondata where id = [ID];";
-    private static final String UPDATE_CONNECTION = "update connectiondata set customermail = [CUSTOMERMAIL], password = [PASSWORD] where id = [ID];";
+    private static final String UPDATE_CONNECTION = "update connectiondata set customermail = %s, password = %s where id = %d;";
     private static final String REMOVE_CONNECTION = "delete from connectiondata where id = [ID];";
-    private static final String GET_CONNECTION_BY_SERVER_NAME = ";";
 
     private DBService(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -47,6 +48,25 @@ public class DBService extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    }
+
+    public boolean checkConnectionExistence(String servername, String serveraddress){
+        String query;
+        int count = 0;
+        SQLiteDatabase db = instance.getReadableDatabase();
+        query = String.format(GET_CONNECTION_BY_SERVERNAME, servername);
+        db.beginTransaction();
+        Cursor resultSet = db.rawQuery(query, null);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        count += resultSet.getCount();
+        query = String.format(GET_CONNECTION_BY_SERVERURI, serveraddress);
+        db.beginTransaction();
+        resultSet = db.rawQuery(query, null);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        count += resultSet.getCount();
+        return count>0;
     }
 
     public ConnectionData getCurrentConnection(Context activity) {
@@ -134,11 +154,7 @@ public class DBService extends SQLiteOpenHelper {
 
         customermail = (customermail == null) ? "null" : "'" + customermail + "'";
         password = (password == null) ? "null" : "'" + password + "'";
-
-        query = query.replace("[ID]", Integer.toString(id));
-        query = query.replace("[CUSTOMERMAIL]", customermail);
-        query = query.replace("[PASSWORD]", password);
-
+        query = String.format(UPDATE_CONNECTION, password, customermail, id);
         try {
             SQLiteDatabase wdb = instance.getWritableDatabase();
             wdb.beginTransaction();
@@ -154,12 +170,7 @@ public class DBService extends SQLiteOpenHelper {
     public void insertNewConnection(String token, String customerid, String password, String customermail, String servername, String serveraddress) {
         String query = INSERT_NEW_CONNNECTION;
         try {
-            query = query.replace("TOKEN", token);
-            query = query.replace("CUSTOMERID", customerid);
-            query = query.replace("PASSWORD", password);
-            query = query.replace("CUSTOMERMAIL", customermail);
-            query = query.replace("SERVERNAME", servername);
-            query = query.replace("SERVERADDRESS", serveraddress);
+            query = String.format(INSERT_NEW_CONNNECTION, token, customerid, customermail, password, servername, serveraddress);
             SQLiteDatabase wdb = instance.getWritableDatabase();
             wdb.beginTransaction();
             wdb.execSQL(query);
