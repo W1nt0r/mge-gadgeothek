@@ -154,7 +154,7 @@ public class DBService extends SQLiteOpenHelper {
 
         customermail = (customermail == null) ? "null" : "'" + customermail + "'";
         password = (password == null) ? "null" : "'" + password + "'";
-        query = String.format(UPDATE_CONNECTION, password, customermail, id);
+        query = String.format(UPDATE_CONNECTION, customermail, password, id);
         try {
             SQLiteDatabase wdb = instance.getWritableDatabase();
             wdb.beginTransaction();
