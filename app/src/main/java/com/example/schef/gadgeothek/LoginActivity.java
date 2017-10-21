@@ -47,18 +47,29 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
     }
 
     private void showFragment(Fragment fragment, Bundle args) {
+        showFragment(fragment, args, true);
+    }
+
+    private void showFragment(Fragment fragment, Bundle args, boolean addToBackStack) {
         fragment.setArguments(args);
 
         FragmentManager mgr = getFragmentManager();
         FragmentTransaction transaction = mgr.beginTransaction();
         transaction.replace(R.id.frameLayout, fragment);
-        transaction.addToBackStack(null);
+        if(addToBackStack) transaction.addToBackStack(null);
 
         transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
+    private void backbuttonCleanupBefore() {
+        switch (stateStack.peek()) {
+            case LOGIN:
+                getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE).edit().clear().apply();
+                break;
+        }
+    }
+
+    private void backbuttonPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 1) {
             stateStack.pop();
             getFragmentManager().popBackStack();
@@ -68,11 +79,19 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
     }
 
     @Override
+    public void onBackPressed() {
+        backbuttonCleanupBefore();
+        backbuttonPressed();
+    }
+
+    @Override
     public void login(ConnectionData connectionData) {
         db.updateConnection(connectionData.getId(), connectionData.getCustomermail(), connectionData.getPassword());
         Intent intent = new Intent(this, GadgeothekActivity.class);
         intent.putExtra(Constants.CONNECTIONDATA_ARGS, connectionData);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -96,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
 
     @Override
     public void addNewServer() {
-        stateStack.push(State.SERVER_MANAGE);
-        showFragment(new ServerManageFragment(), null);
+        backbuttonPressed();
+        //showFragment(new ServerManageFragment(), null, false);
     }
 
 
@@ -113,7 +132,8 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
     public void register(ConnectionData connectionData) {
         Bundle args = new Bundle();
         args.putSerializable(Constants.CONNECTIONDATA_ARGS, connectionData);
-        stateStack.push(State.LOGIN);
-        showFragment(new LoginFragment(), args);
+        /*stateStack.push(State.LOGIN);
+        showFragment(new LoginFragment(), args);*/
+        backbuttonPressed();
     }
 }

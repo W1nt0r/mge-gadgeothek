@@ -90,11 +90,12 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
         ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_choose));
+        currentConnection = activity.getSharedPreferences(Constants.SHARED_PREF, Activity.MODE_PRIVATE).getInt(Constants.CONNECTIONDATA_ARGS, Constants.NO_SERVER_CHOSEN);
 
         serverView = rootView.findViewById(R.id.serverView);
         loadingView = rootView.findViewById(R.id.loadingView);
-        currentConnection = -1;
-        if (getArguments() == null) {
+        //currentConnection = -1;
+        if (getArguments() == null || currentConnection == Constants.NO_SERVER_CHOSEN) {
             updateServerList();
         } else {
             ConnectionData loginData = (ConnectionData)getArguments().getSerializable(Constants.LOGINDATA_ARGS);

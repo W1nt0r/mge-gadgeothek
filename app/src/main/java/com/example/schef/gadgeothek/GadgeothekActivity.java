@@ -61,14 +61,38 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void showFragment(Fragment fragment, Bundle args) {
+        showFragment(fragment, args, true);
+    }
+
+    private void showFragment(Fragment fragment, Bundle args, boolean addToBackStack) {
         fragment.setArguments(args);
 
         FragmentManager mgr = getFragmentManager();
         FragmentTransaction transaction = mgr.beginTransaction();
         transaction.replace(R.id.frameLayout, fragment);
-        transaction.addToBackStack(null);
+        if(addToBackStack) transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    private void backbuttonCleanupBefore() {
+        switch (stateStack.peek()) {
+        }
+    }
+
+    private void backbuttonPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 1) {
+            stateStack.pop();
+            getFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        backbuttonCleanupBefore();
+        backbuttonPressed();
     }
 
     private void logout() {
@@ -78,17 +102,9 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         db.updateConnection(server, null, null);
 
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 1) {
-            if(!stateStack.isEmpty()) stateStack.pop();
-            getFragmentManager().popBackStack();
-        } else {
-            finish();
-        }
+        finish();
     }
 
     @Override
@@ -105,9 +121,10 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (stateStack.peek()) {
             case GADGET_RESERVE:
-                stateStack.pop();
+                /*stateStack.pop();
 
-                showFragment(new GadgetListFragment(), null);
+                showFragment(new GadgetListFragment(), null);*/
+                backbuttonPressed();
                 break;
         }
     }
@@ -129,16 +146,16 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
         switch (item.getItemId()) {
             case R.id.action_gadgets:
-                showFragment(new GadgetListFragment(), args);
+                showFragment(new GadgetListFragment(), args, false);
                 return true;
             case R.id.action_reservations:
-                showFragment(new ReservationManagerFragment(), args);
+                showFragment(new ReservationManagerFragment(), args, false);
                 return true;
             case R.id.action_loans:
-                showFragment(new LoanFragment(), args);
+                showFragment(new LoanFragment(), args, false);
                 return true;
             case R.id.action_server:
-                showFragment(new ServerManageFragment(), args);
+                showFragment(new ServerManageFragment(), args, false);
                 return true;
             default:
                 return false;
@@ -152,7 +169,9 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         editor.putInt(Constants.CONNECTIONDATA_ARGS, connectionData.getId());
         editor.apply();
         Intent loginActivity = new Intent(this, LoginActivity.class);
+        loginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginActivity);
+        finish();
     }
 
     @Override
