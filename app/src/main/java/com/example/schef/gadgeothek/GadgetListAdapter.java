@@ -42,9 +42,7 @@ public class GadgetListAdapter extends RecyclerView.Adapter<GadgetListAdapter.Vi
         TextView nameView = v.findViewById(R.id.gadgetName);
         TextView conditionView = v.findViewById(R.id.gadgetCondition);
 
-        ViewHolder viewHolder = new ViewHolder(v, nameView, conditionView);
-
-        return viewHolder;
+        return new ViewHolder(v, nameView, conditionView);
     }
 
     @Override

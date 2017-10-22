@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
 
     private EditText serverName;
     private EditText serverUri;
+    private TextInputLayout serverNameLayout;
+    private TextInputLayout serverUriLayout;
     private SQLiteDatabase db;
     private Activity activity;
     private Button addButton;
@@ -48,6 +51,10 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
         addButton = rootView.findViewById(R.id.serverAddButton);
         serverName = rootView.findViewById(R.id.serverName);
         serverUri = rootView.findViewById(R.id.serverUri);
+        serverNameLayout = rootView.findViewById(R.id.serverNameLayout);
+        serverUriLayout = rootView.findViewById(R.id.serverUriLayout);
+        serverNameLayout.setErrorEnabled(true);
+        serverUriLayout.setErrorEnabled(true);
         serverUri.setOnFocusChangeListener(this);
         rootView.findViewById(R.id.serverAddButton).setOnClickListener(this);
 
@@ -56,7 +63,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
 
     private void onAttachHelper(Context context) {
         if (context instanceof ServerChanger) {
-            activity = (Activity)context;
+            activity = (Activity) context;
         } else {
             throw new AssertionError("Activity must implement interface ServerChanger");
         }
@@ -70,7 +77,6 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
 
     /**
      * Needed because of Android SDK 21
-     * @param activity
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -86,43 +92,43 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
         final String name = serverName.getText().toString().trim();
         final String address = serverUri.getText().toString().trim();
         if (name.isEmpty()) {
-            serverName.setError(getString(R.string.server_name));
+            serverNameLayout.setError(getString(R.string.server_add_name));
         } else if (address.isEmpty()) {
-            serverUri.setError(getString(R.string.server_address));
+            serverUriLayout.setError(getString(R.string.server_add_address));
         } else {
             // Hide keyboard
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 
 
-            Cursor resultSet = db.rawQuery("SELECT servername, serveraddress FROM connectiondata WHERE servername=? OR serveraddress=?", new String[] { name, address });
+            Cursor resultSet = db.rawQuery("SELECT servername, serveraddress FROM connectiondata WHERE servername=? OR serveraddress=?", new String[]{name, address});
             if (!resultSet.moveToNext()) {
                 addButton.setEnabled(false);
-                addButton.setText(getString(R.string.server_waiting));
+                addButton.setText(getString(R.string.server_add_waiting));
                 progressBar.setVisibility(ProgressBar.VISIBLE);
                 LibraryService.checkGadgeothekServerAddress(address, new Callback<List<Gadget>>() {
                     @Override
                     public void onCompletion(List<Gadget> input) {
-                        db.execSQL("INSERT INTO connectiondata(servername, serveraddress) VALUES(?, ?)", new String[]{ name, address });
-                        Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_added, name), Toast.LENGTH_SHORT);
+                        db.execSQL("INSERT INTO connectiondata(servername, serveraddress) VALUES(?, ?)", new String[]{name, address});
+                        Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_add_added, name), Toast.LENGTH_SHORT);
                         toast.show();
-                        ((ServerChanger)activity).addNewServer();
+                        ((ServerChanger) activity).addNewServer();
                     }
 
                     @Override
                     public void onError(String message) {
                         addButton.setEnabled(true);
-                        addButton.setText(getString(R.string.server_add));
+                        addButton.setText(getString(R.string.server_add_button));
                         progressBar.setVisibility(ProgressBar.GONE);
-                        serverUri.setError("Der Server konnte nicht erreicht werden");
+                        serverUriLayout.setError(getString(R.string.server_add_error));
                     }
                 });
             } else {
                 if (resultSet.getString(0).equals(name)) {
-                    serverName.setError("Der Name wurde bereits verwendet");
+                    serverNameLayout.setError(getString(R.string.server_add_name_used));
                 }
                 if (resultSet.getString(1).equals(address)) {
-                    serverUri.setError("Dieser Server wurde bereits verwendet");
+                    serverUriLayout.setError(getString(R.string.server_add_address_used));
                 }
             }
             resultSet.close();

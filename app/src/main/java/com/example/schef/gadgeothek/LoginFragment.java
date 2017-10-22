@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -24,9 +25,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private ServerChanger activity;
     private EditText mail;
     private EditText password;
+    private TextInputLayout mailLayout;
+    private TextInputLayout passwordLayout;
     private ConnectionData connectionData;
     private Button loginButton;
-    private Button registerButton;
     private View loadingView;
     private View loginView;
     private TextView loadingText;
@@ -39,11 +41,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         loadingText = root.findViewById(R.id.loadingText);
         loginView = root.findViewById(R.id.loginView);
         loginButton = root.findViewById(R.id.loginButton);
-        registerButton = root.findViewById(R.id.registerButton);
         loginButton.setOnClickListener(this);
-        registerButton.setOnClickListener(this);
-        mail = (EditText) root.findViewById(R.id.emailEditText);
-        password = (EditText) root.findViewById(R.id.passwordEditText);
+        root.findViewById(R.id.registerButton).setOnClickListener(this);
+        mail = root.findViewById(R.id.emailEditText);
+        password = root.findViewById(R.id.passwordEditText);
+        mailLayout = root.findViewById(R.id.emailEditTextLayout);
+        passwordLayout = root.findViewById(R.id.passwordEditTextLayout);
+        mailLayout.setErrorEnabled(true);
+        passwordLayout.setErrorEnabled(true);
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
@@ -71,7 +76,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void login() {
         loginView.setVisibility(View.GONE);
         loadingView.setVisibility(View.VISIBLE);
-        loadingText.setText("Sie werden angemeldet...");
+        loadingText.setText(getString(R.string.login_loading));
         final String email = mail.getText().toString();
         final String passwd = password.getText().toString();
         LibraryService.login(email, passwd, new Callback<Boolean>() {
@@ -84,8 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 } else {
                     loadingView.setVisibility(View.GONE);
                     loginView.setVisibility(View.VISIBLE);
-                    Toast toast = Toast.makeText(getActivity().getBaseContext(), "Wrong password or username", Toast.LENGTH_LONG);
-                    toast.show();
+                    Toast.makeText(getActivity().getBaseContext(), getString(R.string.login_error), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -93,8 +97,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onError(String message) {
                 loadingView.setVisibility(View.GONE);
                 loginView.setVisibility(View.VISIBLE);
-                Toast toast = Toast.makeText(getActivity().getBaseContext(), message, Toast.LENGTH_LONG);
-                toast.show();
+                mailLayout.setError(null);
+                passwordLayout.setError(null);
+                switch (message) {
+                    case "user does not exist":
+                        mailLayout.setError(getString(R.string.login_user_not_exist));
+                        break;
+                    case "incorrect password":
+                        passwordLayout.setError(getString(R.string.login_password_incorrect));
+                        break;
+                    default:
+                        Toast.makeText(getActivity().getBaseContext(), message, Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -116,7 +130,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Needed because of Android SDK 21
-     * @param activity
      */
     @SuppressWarnings("deprecation")
     @Override

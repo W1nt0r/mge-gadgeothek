@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.schef.domain.ConnectionData;
 import com.example.schef.domain.Constants;
@@ -22,7 +21,6 @@ import com.example.schef.domain.Gadget;
 import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -76,7 +74,6 @@ public class GadgetListFragment extends Fragment {
 
     /**
      * Needed because of Android SDK 21
-     * @param activity
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -115,22 +112,33 @@ public class GadgetListFragment extends Fragment {
     private void showLoadingScreen() {
         root.findViewById(R.id.errorView).setVisibility(View.GONE);
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
-        root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
+        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
 
-        ((TextView) root.findViewById(R.id.loadingText)).setText("Gadgets werden geladen");
+        ((TextView) root.findViewById(R.id.loadingText)).setText(getString(R.string.gadget_loading));
+        root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
+    }
+
+    private void showNoGadgets() {
+        root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
+        root.findViewById(R.id.loadingView).setVisibility(View.GONE);
+        root.findViewById(R.id.errorView).setVisibility(View.GONE);
+
+        root.findViewById(R.id.noGadgets).setVisibility(View.VISIBLE);
     }
 
     private void showError() {
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.GONE);
+        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
 
-        ((TextView) root.findViewById(R.id.errorText)).setText("Keine Gadgets gefunden");
+        ((TextView) root.findViewById(R.id.errorText)).setText(getString(R.string.gadget_error));
         root.findViewById(R.id.errorView).setVisibility(View.VISIBLE);
     }
 
     private void showRecyclerView() {
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.GONE);
+        root.findViewById(R.id.noGadgets).setVisibility(View.GONE);
         root.findViewById(R.id.gadgetlistRecyclerView).setVisibility(View.VISIBLE);
     }
 
@@ -146,7 +154,7 @@ public class GadgetListFragment extends Fragment {
 
             showRecyclerView();
         } else {
-            showError();
+            showNoGadgets();
         }
     }
 }

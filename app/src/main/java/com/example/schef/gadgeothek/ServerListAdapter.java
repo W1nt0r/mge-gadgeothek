@@ -2,6 +2,7 @@ package com.example.schef.gadgeothek;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
@@ -73,13 +74,17 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
         holder.serverUri.setText(server.getUri());
         if (server.getId() == currentConnection) {
             holder.serverDelete.setVisibility(View.GONE);
-            holder.parent.setBackgroundColor(getColor(R.color.colorAccent));
+            holder.parent.setBackgroundColor(getColor(R.color.colorSecondaryLight));
             holder.serverUri.setTextColor(getColor(R.color.colorFontAccentShadowed));
             holder.serverName.setTextColor(getColor(R.color.colorFontAccent));
             holder.parent.setOnClickListener(null);
         } else {
             holder.serverDelete.setVisibility(View.VISIBLE);
-            holder.parent.setBackgroundColor(getColor(R.color.colorBackgroundNormal));
+            int[] attrs = new int[]{R.attr.selectableItemBackground};
+            TypedArray typedArray = context.obtainStyledAttributes(attrs);
+            int backgroundResource = typedArray.getResourceId(0, 0);
+            holder.parent.setBackgroundResource(backgroundResource);
+            typedArray.recycle();
             holder.serverUri.setTextColor(getColor(R.color.colorFontNormalShadowed));
             holder.serverName.setTextColor(getColor(R.color.colorFontNormal));
             holder.parent.setOnClickListener(new View.OnClickListener() {

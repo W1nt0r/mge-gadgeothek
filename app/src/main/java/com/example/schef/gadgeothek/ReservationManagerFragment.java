@@ -87,7 +87,7 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
                     reservationView.setVisibility(View.GONE);
                     loadingView.setVisibility(View.GONE);
                     errorView.setVisibility(View.VISIBLE);
-                    errorText.setText("Die Daten konnten nicht geladen werden.\nBitte versuchen Sie es später erneut.");
+                    errorText.setText(getString(R.string.reservation_error));
                 }
             });
         }

@@ -19,9 +19,7 @@ import com.example.schef.domain.ConnectionData;
 import com.example.schef.domain.Constants;
 import com.example.schef.domain.Gadget;
 import com.example.schef.domain.State;
-import com.example.schef.service.Callback;
 import com.example.schef.service.DBService;
-import com.example.schef.service.LibraryService;
 
 import java.util.Stack;
 
@@ -42,9 +40,11 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_logo);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_logo);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         connectionData = (ConnectionData)getIntent().getSerializableExtra(Constants.CONNECTIONDATA_ARGS);
 

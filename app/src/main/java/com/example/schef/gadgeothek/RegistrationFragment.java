@@ -3,10 +3,9 @@ package com.example.schef.gadgeothek;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,9 +21,6 @@ import com.example.schef.domain.Constants;
 import com.example.schef.service.Callback;
 import com.example.schef.service.LibraryService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
     private View root;
@@ -34,6 +30,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     private EditText matrikelField;
     private EditText passwordField;
     private EditText passwordRepField;
+    private TextInputLayout nameFieldLayout;
+    private TextInputLayout mailFieldLayout;
+    private TextInputLayout matrikelFieldLayout;
+    private TextInputLayout passwordFieldLayout;
+    private TextInputLayout passwordRepFieldLayout;
     private ConnectionData connectionData;
 
     @Override
@@ -42,11 +43,21 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         root = inflater.inflate(R.layout.fragment_registration, container, false);
 
         root.findViewById(R.id.registrationButton).setOnClickListener(this);
-        nameField = (EditText) root.findViewById(R.id.nameField);
-        mailField = (EditText) root.findViewById(R.id.emailField);
-        matrikelField = (EditText) root.findViewById(R.id.matrikelField);
-        passwordField = (EditText) root.findViewById(R.id.passwordField);
-        passwordRepField = (EditText) root.findViewById(R.id.passwordRepField);
+        nameField = root.findViewById(R.id.nameField);
+        mailField = root.findViewById(R.id.emailField);
+        matrikelField = root.findViewById(R.id.matrikelField);
+        passwordField = root.findViewById(R.id.passwordField);
+        passwordRepField = root.findViewById(R.id.passwordRepField);
+        nameFieldLayout = root.findViewById(R.id.nameFieldLayout);
+        mailFieldLayout = root.findViewById(R.id.emailFieldLayout);
+        matrikelFieldLayout = root.findViewById(R.id.matrikelFieldLayout);
+        passwordFieldLayout = root.findViewById(R.id.passwordFieldLayout);
+        passwordRepFieldLayout = root.findViewById(R.id.passwordRepFieldLayout);
+        nameFieldLayout.setErrorEnabled(true);
+        mailFieldLayout.setErrorEnabled(true);
+        matrikelFieldLayout.setErrorEnabled(true);
+        passwordFieldLayout.setErrorEnabled(true);
+        passwordRepFieldLayout.setErrorEnabled(true);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
@@ -77,7 +88,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     /**
      * Needed because of Android SDK 21
-     * @param activity
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -97,32 +107,44 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         if(name.equals("")) {
             failure = true;
-            nameField.setError("Namens-Feld ist leer");
+            nameFieldLayout.setError(getString(R.string.registration_missing_name));
+        } else {
+            nameFieldLayout.setError(null);
         }
 
         if(mail.equals("")) {
             failure = true;
-            mailField.setError("Mail-Adressen-Feld ist leer");
+            mailFieldLayout.setError(getString(R.string.registration_missing_email));
+        } else {
+            mailFieldLayout.setError(null);
         }
 
         if(matrikelnr.equals("")) {
             failure = true;
-            matrikelField.setError("Matrikelnummern-Feld ist leer");
+            matrikelFieldLayout.setError(getString(R.string.registration_missing_id));
+        } else {
+            matrikelFieldLayout.setError(null);
         }
 
         if(password.equals("")) {
             failure = true;
-            passwordField.setError("Passwort-Feld ist leer");
-        }
-
-        if(passwordRep.equals("")) {
-            failure = true;
-            passwordRepField.setError("Passwort-Wiederhlungs-Feld ist leer");
+            passwordFieldLayout.setError(getString(R.string.registration_missing_password));
+        } else {
+            passwordFieldLayout.setError(null);
         }
 
         if(!password.equals(passwordRep)) {
             failure = true;
-            passwordRepField.setError("Die eingegebenen Passwörter stimmen nicht miteinander überein");
+            passwordRepFieldLayout.setError(getString(R.string.registration_wrong_confirmation));
+        } else {
+            passwordRepFieldLayout.setError(null);
+        }
+
+        if(passwordRep.equals("")) {
+            failure = true;
+            passwordRepFieldLayout.setError(getString(R.string.registration_missing_password));
+        } else {
+            passwordRepFieldLayout.setError(null);
         }
 
         if(!failure) {
@@ -136,9 +158,9 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                         Log.d(getString(R.string.app_name), "Registration State: " + input);
 
                     if (input) {
-                        Toast.makeText(getActivity(), "Die Registierung wurde erfolgreich durchgeführt", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.registration_success), Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "Die Registierung konnte nicht erfolgreich durchgeführt werden", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.registration_no_success), Toast.LENGTH_SHORT).show();
                     }
 
                     connectionData.setCustomermail(mail);
@@ -149,9 +171,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 @Override
                 public void onError(String message) {
                     if (Constants.DEV) Log.d(getString(R.string.app_name), message);
-                    String errmsg = "Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal";
 
-                    Toast.makeText(getActivity(), errmsg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.registration_error), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -161,6 +182,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         root.findViewById(R.id.registrationView).setVisibility(View.GONE);
         root.findViewById(R.id.loadingView).setVisibility(View.VISIBLE);
 
-        ((TextView) root.findViewById(R.id.loadingText)).setText("Registrierung wird durchgeführt");
+        ((TextView) root.findViewById(R.id.loadingText)).setText(getString(R.string.registration_loading));
     }
 }

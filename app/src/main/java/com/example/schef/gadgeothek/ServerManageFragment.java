@@ -2,11 +2,10 @@ package com.example.schef.gadgeothek;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,7 +88,10 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
 
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
-        ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_choose));
+        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.server_choose));
+        }
         currentConnection = activity.getSharedPreferences(Constants.SHARED_PREF, Activity.MODE_PRIVATE).getInt(Constants.CONNECTIONDATA_ARGS, Constants.NO_SERVER_CHOSEN);
 
         serverView = rootView.findViewById(R.id.serverView);
@@ -139,7 +141,6 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
     /**
      * Needed because of Android SDK 21
-     * @param activity
      */
     @SuppressWarnings("deprecation")
     @Override
@@ -152,7 +153,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     public void chooseServer(final ConnectionData connectionData) {
         serverView.setVisibility(View.GONE);
         loadingView.setVisibility(View.VISIBLE);
-        ((TextView)loadingView.findViewById(R.id.loadingText)).setText("Server wird gesucht...");
+        ((TextView)loadingView.findViewById(R.id.loadingText)).setText(getString(R.string.server_loading));
         LibraryService.checkGadgeothekServerAddress(connectionData.getUri(), new Callback<List<Gadget>>() {
             @Override
             public void onCompletion(List<Gadget> input) {
@@ -161,7 +162,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
             @Override
             public void onError(String message) {
-                showToast("Server wurde nicht gefunden");
+                showToast(getString(R.string.server_error));
                 updateServerList();
             }
         });
@@ -169,7 +170,6 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
     @Override
     public void deleteServer(ConnectionData server) {
-        SQLiteDatabase sql = db.getWritableDatabase();
         db.removeConnection(server.getId());
         Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_deleted, server.getName()), Toast.LENGTH_SHORT);
         toast.show();

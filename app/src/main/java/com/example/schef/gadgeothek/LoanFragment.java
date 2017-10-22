@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ public class LoanFragment extends Fragment {
     private LinearLayout errorView;
     private LinearLayout loadingView;
     private TextView noLoansView;
-    private TextView loadingText;
 
     @Override
     public void onAttach(Context context) {
@@ -43,9 +43,8 @@ public class LoanFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_loan, container, false);
         errorView = root.findViewById(R.id.loanError);
         loadingView = root.findViewById(R.id.loanLoading);
-        loadingText = root.findViewById(R.id.loadingText);
         noLoansView = root.findViewById(R.id.no_loans);
-        loadingText.setText(R.string.loans_loading);
+        ((TextView)root.findViewById(R.id.loadingText)).setText(R.string.loan_loading);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -113,7 +112,7 @@ public class LoanFragment extends Fragment {
 
                 @Override
                 public void onError(String message) {
-                    stateError("Fehler beim laden der Daten.\n Stellen Sie sicher, dass sie mit dem Internet verbunden sind.");
+                    stateError(getString(R.string.loan_error));
                     Log.d(getString(R.string.app_name), "Unable to retrieve loans");
                 }
             });
@@ -129,7 +128,7 @@ public class LoanFragment extends Fragment {
             RecyclerView loanView = root.findViewById(R.id.loanListRecyclerView);
             loanView.setVisibility(View.VISIBLE);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            LoanListAdapter adapter = new LoanListAdapter(loans);
+            LoanListAdapter adapter = new LoanListAdapter(loans, this, DateFormat.getDateFormat(getActivity().getApplicationContext()));
 
             loanView.setLayoutManager(layoutManager);
             loanView.setAdapter(adapter);

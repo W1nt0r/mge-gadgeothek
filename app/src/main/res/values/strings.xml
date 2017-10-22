@@ -4,30 +4,51 @@
     <string name="gadgeothek_title_server">Gadgeothek - %1$s</string>
     <string name="gadgeothek_title">Gadgeothek</string>
 
-    <string name="email_hint">email-address</string>
-    <string name="password_hint">password</string>
+    <string name="email_hint">Email-Adresse</string>
+    <string name="password_hint">Passwort</string>
+
     <string name="login_title_server">Login - %1$s</string>
     <string name="login_title">Login</string>
-    <string name="login">login</string>
+    <string name="login_button">Login</string>
+    <string name="login_register">Registrieren</string>
+    <string name="login_loading">Sie werden angemeldet&#8230;</string>
+    <string name="login_error">Login fehlgeschlagen</string>
+    <string name="login_user_not_exist">Benutzer existiert nicht</string>
+    <string name="login_password_incorrect">Passwort inkorrekt</string>
+
+    <string name="registration_password_confirm_hint">Passwort bestätigen</string>
+    <string name="registration_name_hint">Name</string>
+    <string name="registration_matrikel_hint">Matrikel-Nr</string>
     <string name="registration_title_server">Registration - %1$s</string>
     <string name="registration_title">Registration</string>
-    <string name="name_hint">Name</string>
-    <string name="matrikel_hint">Matrikel-Nr</string>
     <string name="registration_button">Registrieren</string>
+    <string name="registration_missing_name">Bitte Namen eingeben</string>
+    <string name="registration_missing_email">Bitte gültige Email-Adresse eingeben</string>
+    <string name="registration_missing_id">Bitte gültige Matrikelnummer eingeben</string>
+    <string name="registration_missing_password">Bitte Passwort eingeben</string>
+    <string name="registration_wrong_confirmation">Passwörter stimmen nicht überein</string>
+    <string name="registration_success">Die Registierung wurde erfolgreich durchgeführt</string>
+    <string name="registration_no_success">Die Registierung konnte nicht erfolgreich durchgeführt werden</string>
+    <string name="registration_error">Die Registrierung konnte nicht durchgeführt werden! Bitte versuchen Sie es später noch einmal</string>
+    <string name="registration_loading">Registrierung wird durchgeführt</string>
 
     <string name="no_server">Kein Gadgeothek-Server vorhanden\nKlicken Sie auf \"+\", um einen Server hinzuzufügen</string>
-    <string name="server_name">Bitte geben Sie einen Namen ein</string>
-    <string name="server_address">Bitte geben Sie einen Server an</string>
-    <string name="server_waiting">Warte auf Server&#8230;</string>
-    <string name="server_added">%1$s hinzugefügt</string>
     <string name="server_deleted">%1$s gelöscht</string>
-    <string name="server_add">Hinzufügen</string>
-    <string name="server_add_title">Server hinzufügen</string>
     <string name="server_name_hint">Server-Name</string>
     <string name="server_uri_hint">Server-URI</string>
     <string name="server_choose">Server wählen</string>
-    <string name="server_fail">Der Server konnte nicht erreicht werden!</string>
+    <string name="server_error">Der Server wurde nicht erreicht!</string>
     <string name="server_loading">Verbinde mit Server&#8230;</string>
+
+    <string name="server_add_button">Hinzufügen</string>
+    <string name="server_add_title">Server hinzufügen</string>
+    <string name="server_add_name">Bitte geben Sie einen Namen ein</string>
+    <string name="server_add_address">Bitte geben Sie einen Server an</string>
+    <string name="server_add_waiting">Warte auf Server&#8230;</string>
+    <string name="server_add_added">%1$s hinzugefügt</string>
+    <string name="server_add_error">Der Server konnte nicht erreicht werden</string>
+    <string name="server_add_name_used">Der Name wurde bereits verwendet</string>
+    <string name="server_add_address_used">Dieser Server wurde bereits verwendet</string>
 
     <string name="no_reservation">Keine Reservationen vorhanden.\nGehen Sie zu den Gadgets, um eine Reservation zu machen</string>
     <string name="reservation_date">Reserviert am %1$s</string>
@@ -36,13 +57,27 @@
     <string name="reservation_deleted">Reservation gelöscht</string>
     <string name="reservation_deleting_fail">Löschen fehlgeschlagen</string>
     <string name="reservation_title">Meine Reservationen</string>
+    <string name="reservation_error">"Die Daten konnten nicht geladen werden.\nBitte versuchen Sie es später erneut."</string>
 
     <string name="logo">Logo Gadgeothek</string>
 
     <string name="reserve_gadget_title">Gadget Reservation</string>
+    <string name="reserve_gadget_button">Reserviere Gadget</string>
+    <string name="reserve_gadget_price">Herstellerpreis: %1$.2f CHF</string>
+    <string name="reserve_gadget_success">Reservierung erfolgreich durchgeführt</string>
+    <string name="reserve_gadget_display_error">"Gadget konnte nicht dargestellt werden"</string>
+    <string name="reserve_gadget_no_success">"Reservierung konnte nicht durchgeführt werden"</string>
+    <string name="reserve_gadget_loading">Reservierung wird durchgeführt&#8230;</string>
+    <string name="reserve_gadget_error">Die Reservierung konnte nicht durchgeführt werden, bitte probieren Sie es später noch einmal.</string>
 
-    <string name="no_loans">Keine Ausleihen gefunden</string>
-    <string name="loans_loading">Ausleihen werden geladen</string>
+    <string name="no_gadget">Keine Gadgets gefunden</string>
+    <string name="gadget_loading">Gadgets werden geladen&#8230;</string>
+    <string name="gadget_error">"Die Gadgets konnten nicht geladen werden."</string>
+
+    <string name="no_loan">Keine Ausleihen gefunden</string>
+    <string name="loan_loading">Ausleihen werden geladen&#8230;</string>
+    <string name="loan_error">Fehler beim laden der Daten.\n Stellen Sie sicher, dass sie mit dem Internet verbunden sind.</string>
+    <string name="loan_date">Ausgeliehen am %1$s</string>
 
     <!-- Menus -->
     <string name="menu_logout_title">Logout</string>

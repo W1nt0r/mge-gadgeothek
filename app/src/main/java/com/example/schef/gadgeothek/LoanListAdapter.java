@@ -1,5 +1,6 @@
 package com.example.schef.gadgeothek;
 
+import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,15 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.schef.domain.Loan;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import java.util.List;
 
-/**
- * Created by Schef on 18.10.2017.
- */
-
 public class LoanListAdapter extends  RecyclerView.Adapter<LoanListAdapter.ViewHolder>{
+
+    private Fragment parent;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View parent;
@@ -30,12 +29,13 @@ public class LoanListAdapter extends  RecyclerView.Adapter<LoanListAdapter.ViewH
         }
     }
 
-    private SimpleDateFormat format;
+    private DateFormat format;
     private List<Loan> loans;
 
-    public LoanListAdapter(List<Loan> loans){
+    public LoanListAdapter(List<Loan> loans, Fragment parent, DateFormat dateFormat){
         this.loans = loans;
-        this.format = new SimpleDateFormat("d.MMM yyyy");
+        this.format = dateFormat;
+        this.parent = parent;
     }
 
     @Override
@@ -44,8 +44,7 @@ public class LoanListAdapter extends  RecyclerView.Adapter<LoanListAdapter.ViewH
         View v = layoutInflater.inflate(R.layout.loanrowlayout, parent, false);
         TextView titleView = v.findViewById(R.id.loanTitle);
         TextView dateView = v.findViewById(R.id.loanPickupDate);
-        ViewHolder viewHolder = new ViewHolder(v, titleView, dateView);
-        return viewHolder;
+        return new ViewHolder(v, titleView, dateView);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class LoanListAdapter extends  RecyclerView.Adapter<LoanListAdapter.ViewH
         final Loan loan = loans.get(position);
 
         holder.titleView.setText(loan.getGadget().getName());
-        holder.dateView.setText("Ausgeliehen am: " + format.format(loan.getPickupDate()));
+        holder.dateView.setText(parent.getString(R.string.loan_date, format.format(loan.getPickupDate())));
     }
 
     @Override
