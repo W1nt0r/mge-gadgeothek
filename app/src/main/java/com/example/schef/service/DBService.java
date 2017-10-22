@@ -50,7 +50,36 @@ public class DBService extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
     }
 
-    public boolean checkConnectionExistence(String servername, String serveraddress){
+    public boolean checkExistenceByName(String name) {
+        String query = "";
+        SQLiteDatabase db = instance.getReadableDatabase();
+        query = String.format(GET_CONNECTION_BY_SERVERNAME, name);
+        db.beginTransaction();
+        Cursor resultSet = db.rawQuery(query, null);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        if (!resultSet.moveToNext()) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkExistenceByAddress(String serveraddress) {
+        String query = "";
+        SQLiteDatabase db = instance.getReadableDatabase();
+        query = String.format(GET_CONNECTION_BY_SERVERURI, serveraddress);
+        db.beginTransaction();
+        Cursor resultSet = db.rawQuery(query, null);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        if (!resultSet.moveToNext()) {
+            return false;
+        }
+        return true;
+
+    }
+
+    public boolean checkConnectionExistence(String servername, String serveraddress) {
         String query;
         int count = 0;
         SQLiteDatabase db = instance.getReadableDatabase();
@@ -66,7 +95,7 @@ public class DBService extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         count += resultSet.getCount();
-        return count>0;
+        return count > 0;
     }
 
     public ConnectionData getCurrentConnection(Context activity) {
@@ -165,6 +194,14 @@ public class DBService extends SQLiteOpenHelper {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+
+    public void insertNewConnection(ConnectionData c){
+        insertNewConnection(c.getToken(), c.getCustomerid(), c.getPassword(), c.getCustomermail(), c.getName(), c.getUri());
+    }
+
+    public void insertNewConnection(String name, String address){
+        insertNewConnection("","","","",name, address);
     }
 
     public void insertNewConnection(String token, String customerid, String password, String customermail, String servername, String serveraddress) {

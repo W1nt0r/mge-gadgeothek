@@ -31,7 +31,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
     private EditText serverUri;
     private TextInputLayout serverNameLayout;
     private TextInputLayout serverUriLayout;
-    private SQLiteDatabase db;
+    private DBService db;
     private Activity activity;
     private Button addButton;
     private ProgressBar progressBar;
@@ -44,7 +44,7 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
         //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_add_title));
         ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_add_title));
 
-        db = DBService.getDBService(null).getWritableDatabase();
+        db = DBService.getDBService(null);
         System.out.println(db);
 
         progressBar = rootView.findViewById(R.id.progressBar);
@@ -100,38 +100,45 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 
+            boolean nameExists = false;
+            boolean addressExists = false;
+            //boolean nameExists = db.checkExistenceByName(name);
+            //boolean addressExists = db.checkExistenceByAddress(address);
 
-            Cursor resultSet = db.rawQuery("SELECT servername, serveraddress FROM connectiondata WHERE servername=? OR serveraddress=?", new String[]{name, address});
-            if (!resultSet.moveToNext()) {
-                addButton.setEnabled(false);
-                addButton.setText(getString(R.string.server_add_waiting));
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                LibraryService.checkGadgeothekServerAddress(address, new Callback<List<Gadget>>() {
-                    @Override
-                    public void onCompletion(List<Gadget> input) {
-                        db.execSQL("INSERT INTO connectiondata(servername, serveraddress) VALUES(?, ?)", new String[]{name, address});
-                        Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_add_added, name), Toast.LENGTH_SHORT);
-                        toast.show();
-                        ((ServerChanger) activity).addNewServer();
-                    }
+                nameExists = db.checkExistenceByName(name);
+                addressExists = db.checkExistenceByAddress(address);
 
-                    @Override
-                    public void onError(String message) {
-                        addButton.setEnabled(true);
-                        addButton.setText(getString(R.string.server_add_button));
-                        progressBar.setVisibility(ProgressBar.GONE);
-                        serverUriLayout.setError(getString(R.string.server_add_error));
+                Toast.makeText(getActivity().getBaseContext(), "successfull", Toast.LENGTH_LONG).show();
+            if ((!nameExists) && (!addressExists)) {
+                    addButton.setEnabled(false);
+                    addButton.setText(getString(R.string.server_add_waiting));
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                    LibraryService.checkGadgeothekServerAddress(address, new Callback<List<Gadget>>() {
+                        @Override
+                        public void onCompletion(List<Gadget> input) {
+                            db.insertNewConnection(name, address);
+                            Toast toast = Toast.makeText(activity.getApplicationContext(), getString(R.string.server_add_added, name), Toast.LENGTH_SHORT);
+                            toast.show();
+                            ((ServerChanger) activity).addNewServer();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            addButton.setEnabled(true);
+                            addButton.setText(getString(R.string.server_add_button));
+                            progressBar.setVisibility(ProgressBar.GONE);
+                            serverUriLayout.setError(getString(R.string.server_add_error));
+                        }
+                    });
+                } else {
+                    if (nameExists) {
+                        serverNameLayout.setError(getString(R.string.server_add_name_used));
                     }
-                });
-            } else {
-                if (resultSet.getString(0).equals(name)) {
-                    serverNameLayout.setError(getString(R.string.server_add_name_used));
+                    if (addressExists) {
+                        serverUriLayout.setError(getString(R.string.server_add_address_used));
+                    }
                 }
-                if (resultSet.getString(1).equals(address)) {
-                    serverUriLayout.setError(getString(R.string.server_add_address_used));
-                }
-            }
-            resultSet.close();
+
         }
     }
 
