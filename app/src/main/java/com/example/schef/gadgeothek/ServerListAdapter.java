@@ -22,6 +22,7 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
     private ServerManager serverManager;
     private int currentConnection;
     private Context context;
+    private ConnectionData pseudoServer;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -41,6 +42,8 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
     }
 
     public ServerListAdapter(List<ConnectionData> servers, ServerManager serverManager, int currentConnection, Context context) {
+        pseudoServer = new ConnectionData(-1, null, null);
+        servers.add(pseudoServer);
         this.serverManager = serverManager;
         this.servers = servers;
         this.currentConnection = currentConnection;
@@ -72,7 +75,15 @@ public class ServerListAdapter extends RecyclerView.Adapter<ServerListAdapter.Vi
         final ConnectionData server = servers.get(position);
         holder.serverName.setText(server.getName());
         holder.serverUri.setText(server.getUri());
-        if (server.getId() == currentConnection) {
+        if (server == pseudoServer) {
+            int[] attrs = new int[]{R.attr.background};
+            TypedArray typedArray = context.obtainStyledAttributes(attrs);
+            int backgroundResource = typedArray.getResourceId(0, 0);
+            holder.parent.setBackgroundResource(backgroundResource);
+            typedArray.recycle();
+            holder.serverDelete.setVisibility(View.GONE);
+            holder.parent.setOnClickListener(null);
+        } else if (server.getId() == currentConnection) {
             holder.serverDelete.setVisibility(View.GONE);
             holder.parent.setBackgroundColor(getColor(R.color.colorSecondaryLight));
             holder.serverUri.setTextColor(getColor(R.color.colorFontAccentShadowed));
