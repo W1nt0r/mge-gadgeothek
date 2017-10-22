@@ -1,30 +1,29 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/loanListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/loanListRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/no_loans"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/no_loans"
-            android:visibility="visible"/>
-        <include layout="@layout/error_view"
-            android:id="@+id/loanError"
-            android:visibility="gone" />
-        <include layout="@layout/fragment_loading"
-            android:id="@+id/loanLoading"
-            android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/no_loans"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_loan"
+        android:visibility="visible" />
 
-</LinearLayout>
+    <include
+        android:id="@+id/loanError"
+        layout="@layout/error_view"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/loanLoading"
+        layout="@layout/fragment_loading"
+        android:visibility="gone" />
+
+</RelativeLayout>

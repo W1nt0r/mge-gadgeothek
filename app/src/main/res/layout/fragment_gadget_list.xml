@@ -3,25 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gadgetlistRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
-   <!-- <TextView
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/noGadgets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:text="@string/no_gadget"
         android:gravity="center"
-        android:text="Keine Gadgets gefunden"
-        android:visibility="visible"/>-->
-    <include layout="@layout/error_view"
-        android:id="@+id/errorView"
         android:visibility="gone" />
 
-    <include layout="@layout/fragment_loading"
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/error_view"
+        android:visibility="gone" />
+
+    <include
         android:id="@+id/loadingView"
-        android:visibility="gone"/>
+        layout="@layout/fragment_loading"
+        android:visibility="gone" />
 </RelativeLayout>
 
 

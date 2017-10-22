@@ -4,32 +4,48 @@
     android:layout_height="match_parent"
     android:layout_marginEnd="@dimen/form_margin"
     android:layout_marginStart="@dimen/form_margin"
+    android:layout_marginTop="@dimen/form_margin_top"
     tools:context="com.example.schef.gadgeothek.ServerAddFragment">
 
-    <EditText
-        android:id="@+id/serverName"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/serverNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/form_element_margin"
-        android:hint="@string/server_name_hint"
-        android:inputType="text" />
+        android:layout_marginTop="@dimen/form_element_margin">
 
-    <EditText
-        android:id="@+id/serverUri"
+        <EditText
+            android:id="@+id/serverName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/server_name_hint"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/serverUriLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/serverName"
-        android:layout_marginTop="@dimen/form_element_margin"
-        android:hint="@string/server_uri_hint"
-        android:inputType="textUri" />
+        android:layout_below="@id/serverNameLayout">
+
+        <EditText
+            android:id="@+id/serverUri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/server_uri_hint"
+            android:inputType="textUri" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/serverAddButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/serverUri"
+        android:layout_alignEnd="@id/serverUriLayout"
+        android:layout_below="@id/serverUriLayout"
         android:layout_marginTop="@dimen/form_element_margin"
-        android:text="@string/server_add" />
+        android:background="@color/colorSecondary"
+        android:paddingEnd="@dimen/button_padding_horizontal"
+        android:paddingStart="@dimen/button_padding_horizontal"
+        android:text="@string/server_add_button" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -38,6 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/serverAddButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/form_margin"
         android:visibility="gone" />
 </RelativeLayout>

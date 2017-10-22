@@ -2,15 +2,40 @@
 <resources>
 
     <dimen name="title_size">27sp</dimen>
+
     <dimen name="form_title">27sp</dimen>
+    <dimen name="form_margin_top">8dp</dimen>
     <dimen name="form_element_margin">16dp</dimen>
     <dimen name="form_margin">16dp</dimen>
     <dimen name="form_textview_textsize">17sp</dimen>
+
     <dimen name="bar_heights">56dp</dimen>
+
     <dimen name="toolbar_title">27sp</dimen>
     <dimen name="toolbar_margin_start">72dp</dimen>
     <dimen name="toolbar_margin_icon_start">32dp</dimen>
     <dimen name="toolbar_icon_size">32dp</dimen>
-    <dimen name="list_margin_start">16dp</dimen>
+
+    <dimen name="button_padding_horizontal">16dp</dimen>
+    <dimen name="button_space_between">8dp</dimen>
+
+    <dimen name="list_text_normal">16sp</dimen>
+    <dimen name="list_text_secondary">14sp</dimen>
+    <dimen name="list_margin_horizontal">16dp</dimen>
+    <dimen name="list_margin_vertical">20dp</dimen>
+    <dimen name="list_space_text_between">4dp</dimen>
     <dimen name="list_item_height">72dp</dimen>
+    <dimen name="list_button_size">24dp</dimen>
+
+    <dimen name="card_margin_top">16dp</dimen>
+    <dimen name="card_text_main">24sp</dimen>
+    <dimen name="card_space_between">12dp</dimen>
+
+    <dimen name="loading_size">100dp</dimen>
+    <dimen name="loading_margin">100dp</dimen>
+    <dimen name="loading_progress_size">75dp</dimen>
+
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
 </resources>
