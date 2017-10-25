@@ -61,6 +61,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+
         if (connectionData != null && connectionData.getCustomermail() != null && connectionData.getPassword() != null) {
             mail.setText(connectionData.getCustomermail());
             password.setText(connectionData.getPassword());

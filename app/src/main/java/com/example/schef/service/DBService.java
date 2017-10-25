@@ -21,7 +21,7 @@ public class DBService extends SQLiteOpenHelper {
     private static DBService instance;
 
     private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid varchar(200), password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) unique not null);";
-    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('%s', '%s', '%s', '%s', '%s', '%s');";
+    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('%s', '%s', %s, %s, '%s', '%s');";
     private static final String GET_CONNECTIONS = "select * from connectiondata;";
     private static final String GET_CONNECTION_BY_SERVERNAME = "select * from connectiondata where servername = '%s';";
     private static final String GET_CONNECTION_BY_SERVERURI = "Select * from connectiondata where serveraddress = '%s';";
@@ -201,7 +201,7 @@ public class DBService extends SQLiteOpenHelper {
     }
 
     public void insertNewConnection(String name, String address){
-        insertNewConnection("","","","",name, address);
+        insertNewConnection("","",null,null,name, address);
     }
 
     public void insertNewConnection(String token, String customerid, String password, String customermail, String servername, String serveraddress) {
@@ -216,5 +216,9 @@ public class DBService extends SQLiteOpenHelper {
         } catch (Exception ex) {
             throw ex;
         }
+    }
+
+    public static void clearDB() {
+        instance.getWritableDatabase().execSQL("DELETE FROM connectiondata");
     }
 }
