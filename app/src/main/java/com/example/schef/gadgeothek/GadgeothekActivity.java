@@ -144,6 +144,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Bundle args = new Bundle();
         args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
+        onNavigationItemSelectedDetailViewCleanup();
         switch (item.getItemId()) {
             case R.id.action_gadgets:
                 showFragment(new GadgetListFragment(), args, false);
@@ -159,6 +160,13 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void onNavigationItemSelectedDetailViewCleanup() {
+        switch (stateStack.peek()) {
+            case GADGET_RESERVE:
+                backbuttonPressed();
         }
     }
 
