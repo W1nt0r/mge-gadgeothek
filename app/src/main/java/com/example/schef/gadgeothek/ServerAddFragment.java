@@ -41,11 +41,9 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_add, container, false);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_add_title));
         ((AppCompatActivity) activity).getSupportActionBar().setTitle(getString(R.string.server_add_title));
 
         db = DBService.getDBService(null);
-        System.out.println(db);
 
         progressBar = rootView.findViewById(R.id.progressBar);
         addButton = rootView.findViewById(R.id.serverAddButton);
@@ -100,13 +98,8 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 
-            boolean nameExists = false;
-            boolean addressExists = false;
-            //boolean nameExists = db.checkExistenceByName(name);
-            //boolean addressExists = db.checkExistenceByAddress(address);
-
-                nameExists = db.checkExistenceByName(name);
-                addressExists = db.checkExistenceByAddress(address);
+            boolean nameExists = db.checkExistenceByName(name);
+            boolean addressExists = db.checkExistenceByAddress(address);
 
             if ((!nameExists) && (!addressExists)) {
                     addButton.setEnabled(false);

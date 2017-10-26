@@ -27,8 +27,6 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE).edit().clear().apply();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -116,7 +114,6 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
     @Override
     public void addNewServer() {
         backbuttonPressed();
-        //showFragment(new ServerManageFragment(), null, false);
     }
 
 
@@ -132,8 +129,7 @@ public class LoginActivity extends AppCompatActivity implements LoginHandler, Se
     public void register(ConnectionData connectionData) {
         Bundle args = new Bundle();
         args.putSerializable(Constants.CONNECTIONDATA_ARGS, connectionData);
-        /*stateStack.push(State.LOGIN);
-        showFragment(new LoginFragment(), args);*/
+
         backbuttonPressed();
     }
 }

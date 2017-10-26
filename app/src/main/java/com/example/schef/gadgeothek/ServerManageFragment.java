@@ -87,7 +87,6 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         rootView = inflater.inflate(R.layout.fragment_server_manage, container, false);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.server_choose));
         ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(getString(R.string.server_choose));
@@ -96,7 +95,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         serverView = rootView.findViewById(R.id.serverView);
         loadingView = rootView.findViewById(R.id.loadingView);
-        //currentConnection = -1;
+
         if (getArguments() == null || currentConnection == Constants.NO_SERVER_CHOSEN) {
             updateServerList();
         } else {

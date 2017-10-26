@@ -35,7 +35,6 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_gadgeothek);
         ((BottomNavigationView) findViewById(R.id.gadgeothekActivityBottomNavi)).setOnNavigationItemSelectedListener(this);
 
-        //connectionData = (ConnectionData) getIntent().getSerializableExtra(Constants.CONNECTIONDATA_ARGS);
         db = DBService.getDBService(null);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -109,8 +108,6 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void lookupGadgetDetail(Gadget gadget) {
-        if(Constants.DEV) Log.d(getString(R.string.app_name), "Clicked on Gadget: " + gadget.getInventoryNumber());
-
         stateStack.push(State.GADGET_RESERVE);
         Bundle args = new Bundle();
         args.putSerializable(Constants.GADGET_ARGS, gadget);
@@ -121,9 +118,6 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (stateStack.peek()) {
             case GADGET_RESERVE:
-                /*stateStack.pop();
-
-                showFragment(new GadgetListFragment(), null);*/
                 backbuttonPressed();
                 break;
         }
@@ -193,7 +187,7 @@ public class GadgeothekActivity extends AppCompatActivity implements View.OnClic
         stateStack.push(State.SERVER_MANAGE);
         Bundle args = new Bundle();
         args.putSerializable(Constants.LOGINDATA_ARGS, connectionData);
-        System.out.println(connectionData.getId());
+
         showFragment(new ServerManageFragment(), args);
     }
 }

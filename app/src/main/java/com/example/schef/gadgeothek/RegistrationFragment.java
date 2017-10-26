@@ -59,7 +59,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         passwordFieldLayout.setErrorEnabled(true);
         passwordRepFieldLayout.setErrorEnabled(true);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.reserve_gadget_title));
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -153,10 +152,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             LibraryService.register(mail, password, name, matrikelnr, new Callback<Boolean>() {
                 @Override
                 public void onCompletion(Boolean input) {
-                    //insert into db, return to other fragment
-                    if (Constants.DEV)
-                        Log.d(getString(R.string.app_name), "Registration State: " + input);
-
                     if (input) {
                         Toast.makeText(getActivity(), getString(R.string.registration_success), Toast.LENGTH_SHORT).show();
                     } else {
@@ -170,8 +165,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
                 @Override
                 public void onError(String message) {
-                    if (Constants.DEV) Log.d(getString(R.string.app_name), message);
-
                     Toast.makeText(getActivity(), getString(R.string.registration_error), Toast.LENGTH_LONG).show();
                 }
             });

@@ -36,7 +36,6 @@ public class GadgetListFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_gadget_list, container, false);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             if (getArguments() != null) {
@@ -47,10 +46,6 @@ public class GadgetListFragment extends Fragment {
             } else {
                 actionBar.setTitle(getString(R.string.gadgeothek_title));
             }
-        }
-
-        if(Constants.DEV) {
-            LibraryService.setServerAddress("http://mge1.dev.ifs.hsr.ch/public");
         }
 
         setup();
@@ -88,8 +83,6 @@ public class GadgetListFragment extends Fragment {
         LibraryService.getGadgets(new Callback<List<Gadget>>() {
             @Override
             public void onCompletion(List<Gadget> input) {
-                if(Constants.DEV) Log.d(getString(R.string.app_name), "Successfully retrieved gadgets from Server");
-
                 Collections.sort(input, new Comparator<Gadget>() {
                     @Override
                     public int compare(Gadget g1, Gadget g2) {
@@ -102,8 +95,6 @@ public class GadgetListFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                if(Constants.DEV) Log.d(getString(R.string.app_name), "Failed with message: " + message);
-
                 showError();
             }
         });

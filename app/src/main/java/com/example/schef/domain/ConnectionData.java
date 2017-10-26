@@ -7,8 +7,6 @@ public class ConnectionData implements Serializable {
     private int id;
     private String name;
     private String uri;
-    private String token;
-    private String customerid;
     private String password;
     private String customermail;
 
@@ -18,10 +16,8 @@ public class ConnectionData implements Serializable {
         this.uri = uri;
     }
 
-    public ConnectionData(int id, String name, String uri, String token, String customerid, String password, String customermail) {
+    public ConnectionData(int id, String name, String uri, String password, String customermail) {
         this(id, name, uri);
-        this.token = token;
-        this.customerid = customerid;
         this.password = password;
         this.customermail = customermail;
     }
@@ -36,22 +32,6 @@ public class ConnectionData implements Serializable {
 
     public String getUri() {
         return uri;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(String customerid) {
-        this.customerid = customerid;
     }
 
     public String getPassword() {

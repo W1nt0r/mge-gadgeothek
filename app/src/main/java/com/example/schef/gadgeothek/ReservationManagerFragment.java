@@ -49,7 +49,6 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
             errorView.setVisibility(View.GONE);
             loadingView.setVisibility(View.VISIBLE);
 
-            //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.app_name));
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
                 if (getArguments() != null) {
@@ -123,11 +122,6 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
         loadReservations();
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     @Override

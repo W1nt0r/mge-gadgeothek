@@ -51,7 +51,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         passwordLayout.setErrorEnabled(true);
         connectionData = (ConnectionData) getArguments().getSerializable(Constants.CONNECTIONDATA_ARGS);
 
-        //((TextView) getActivity().findViewById(R.id.toolbarTitle)).setText(getString(R.string.login_title));
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             if (getArguments() != null && connectionData != null) {
@@ -60,7 +59,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 actionBar.setTitle(getString(R.string.login_title_server));
             }
         }
-
 
         if (connectionData != null && connectionData.getCustomermail() != null && connectionData.getPassword() != null) {
             mail.setText(connectionData.getCustomermail());

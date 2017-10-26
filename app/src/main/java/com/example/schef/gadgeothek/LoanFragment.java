@@ -33,11 +33,6 @@ public class LoanFragment extends Fragment {
     private TextView noLoansView;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_loan, container, false);
@@ -113,7 +108,6 @@ public class LoanFragment extends Fragment {
                 @Override
                 public void onError(String message) {
                     stateError(getString(R.string.loan_error));
-                    Log.d(getString(R.string.app_name), "Unable to retrieve loans");
                 }
             });
 

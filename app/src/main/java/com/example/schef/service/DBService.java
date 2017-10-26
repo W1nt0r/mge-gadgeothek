@@ -20,8 +20,8 @@ public class DBService extends SQLiteOpenHelper {
     private static final int DB_VERSION = 2;
     private static DBService instance;
 
-    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, token varchar(200), customerid varchar(200), password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) unique not null);";
-    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(token, customerid, password, customermail, servername, serveraddress) values ('%s', '%s', %s, %s, '%s', '%s');";
+    private static final String TABLE_CONNECTIONDATA_CREATION = "create table connectiondata(id integer primary key autoincrement, password varchar(100), customermail varchar(100), servername varchar(100) unique not null, serveraddress varchar(250) unique not null);";
+    private static final String INSERT_NEW_CONNNECTION = "insert into connectiondata(password, customermail, servername, serveraddress) values (%s, %s, '%s', '%s');";
     private static final String GET_CONNECTIONS = "select * from connectiondata;";
     private static final String GET_CONNECTION_BY_SERVERNAME = "select * from connectiondata where servername = '%s';";
     private static final String GET_CONNECTION_BY_SERVERURI = "Select * from connectiondata where serveraddress = '%s';";
@@ -110,7 +110,7 @@ public class DBService extends SQLiteOpenHelper {
             Cursor resultSet;
             try {
                 int id;
-                String token, customerid, password, customermail, servername, serveraddress;
+                String password, customermail, servername, serveraddress;
                 SQLiteDatabase rdb = instance.getReadableDatabase();
                 rdb.beginTransaction();
                 resultSet = rdb.rawQuery(query, null);
@@ -118,14 +118,12 @@ public class DBService extends SQLiteOpenHelper {
                 rdb.endTransaction();
                 if (resultSet.moveToFirst()) {
                     id = resultSet.getInt(resultSet.getColumnIndex("id"));
-                    token = resultSet.getString(resultSet.getColumnIndex("token"));
-                    customerid = resultSet.getString(resultSet.getColumnIndex("customerid"));
                     password = resultSet.getString(resultSet.getColumnIndex("password"));
                     customermail = resultSet.getString(resultSet.getColumnIndex("customermail"));
                     servername = resultSet.getString(resultSet.getColumnIndex("servername"));
                     serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
                     resultSet.close();
-                    return new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail);
+                    return new ConnectionData(id, servername, serveraddress, password, customermail);
                 } else {
                     resultSet.close();
                     return null;
@@ -151,7 +149,7 @@ public class DBService extends SQLiteOpenHelper {
         List<ConnectionData> connections = new ArrayList<ConnectionData>();
         Cursor resultSet = null;
         int id;
-        String token, customerid, password, customermail, servername, serveraddress;
+        String password, customermail, servername, serveraddress;
 
         try {
             SQLiteDatabase rdb = instance.getReadableDatabase();
@@ -169,13 +167,11 @@ public class DBService extends SQLiteOpenHelper {
         resultSet.moveToFirst();
         do {
             id = resultSet.getInt(resultSet.getColumnIndex("id"));
-            token = resultSet.getString(resultSet.getColumnIndex("token"));
-            customerid = resultSet.getString(resultSet.getColumnIndex("customerid"));
             password = resultSet.getString(resultSet.getColumnIndex("password"));
             customermail = resultSet.getString(resultSet.getColumnIndex("customermail"));
             servername = resultSet.getString(resultSet.getColumnIndex("servername"));
             serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
-            connections.add(new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail));
+            connections.add(new ConnectionData(id, servername, serveraddress, password, customermail));
         }
         while (resultSet.moveToNext());
 
@@ -201,17 +197,17 @@ public class DBService extends SQLiteOpenHelper {
     }
 
     public void insertNewConnection(ConnectionData c){
-        insertNewConnection(c.getToken(), c.getCustomerid(), c.getPassword(), c.getCustomermail(), c.getName(), c.getUri());
+        insertNewConnection(c.getPassword(), c.getCustomermail(), c.getName(), c.getUri());
     }
 
     public void insertNewConnection(String name, String address){
-        insertNewConnection("","",null,null,name, address);
+        insertNewConnection(null,null,name, address);
     }
 
-    public void insertNewConnection(String token, String customerid, String password, String customermail, String servername, String serveraddress) {
+    public void insertNewConnection(String password, String customermail, String servername, String serveraddress) {
         String query = INSERT_NEW_CONNNECTION;
         try {
-            query = String.format(INSERT_NEW_CONNNECTION, token, customerid, customermail, password, servername, serveraddress);
+            query = String.format(INSERT_NEW_CONNNECTION, customermail, password, servername, serveraddress);
             SQLiteDatabase wdb = instance.getWritableDatabase();
             wdb.beginTransaction();
             wdb.execSQL(query);

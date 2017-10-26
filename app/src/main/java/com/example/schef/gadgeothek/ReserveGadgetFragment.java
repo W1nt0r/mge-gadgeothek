@@ -82,8 +82,6 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
         LibraryService.reserveGadget(displayedGadget, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean input) {
-                if(Constants.DEV) Log.d(getString(R.string.app_name), "Reservation state: " + input);
-
                 if(input) {
                     Toast.makeText(getActivity(), getString(R.string.reserve_gadget_success), Toast.LENGTH_SHORT).show();
                 } else {
@@ -95,8 +93,6 @@ public class ReserveGadgetFragment extends Fragment implements View.OnClickListe
 
             @Override
             public void onError(String message) {
-                if(Constants.DEV) Log.d(getString(R.string.app_name), "Failed with message: " + message);
-
                 Toast.makeText(getActivity(), getString(R.string.reserve_gadget_error), Toast.LENGTH_LONG).show();
 
                 ((View.OnClickListener) activity).onClick(view);
