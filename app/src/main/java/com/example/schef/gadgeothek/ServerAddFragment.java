@@ -108,7 +108,6 @@ public class ServerAddFragment extends Fragment implements View.OnClickListener,
                 nameExists = db.checkExistenceByName(name);
                 addressExists = db.checkExistenceByAddress(address);
 
-                Toast.makeText(getActivity().getBaseContext(), "successfull", Toast.LENGTH_LONG).show();
             if ((!nameExists) && (!addressExists)) {
                     addButton.setEnabled(false);
                     addButton.setText(getString(R.string.server_add_waiting));
