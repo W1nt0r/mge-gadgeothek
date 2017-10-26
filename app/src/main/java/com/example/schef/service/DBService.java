@@ -102,7 +102,7 @@ public class DBService extends SQLiteOpenHelper {
         SharedPreferences settings = activity.getSharedPreferences(Constants.SHARED_PREF, activity.MODE_PRIVATE);
         int server = settings.getInt(Constants.CONNECTIONDATA_ARGS, Constants.NO_SERVER_CHOSEN);
 
-        if (server < 0) {
+        if (server == Constants.NO_SERVER_CHOSEN) {
             return null;
         } else {
             String query = GET_CURRENT_CONNECTION;
@@ -116,16 +116,20 @@ public class DBService extends SQLiteOpenHelper {
                 resultSet = rdb.rawQuery(query, null);
                 rdb.setTransactionSuccessful();
                 rdb.endTransaction();
-                resultSet.moveToFirst();
-                id = resultSet.getInt(resultSet.getColumnIndex("id"));
-                token = resultSet.getString(resultSet.getColumnIndex("token"));
-                customerid = resultSet.getString(resultSet.getColumnIndex("customerid"));
-                password = resultSet.getString(resultSet.getColumnIndex("password"));
-                customermail = resultSet.getString(resultSet.getColumnIndex("customermail"));
-                servername = resultSet.getString(resultSet.getColumnIndex("servername"));
-                serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
-                resultSet.close();
-                return new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail);
+                if (resultSet.moveToFirst()) {
+                    id = resultSet.getInt(resultSet.getColumnIndex("id"));
+                    token = resultSet.getString(resultSet.getColumnIndex("token"));
+                    customerid = resultSet.getString(resultSet.getColumnIndex("customerid"));
+                    password = resultSet.getString(resultSet.getColumnIndex("password"));
+                    customermail = resultSet.getString(resultSet.getColumnIndex("customermail"));
+                    servername = resultSet.getString(resultSet.getColumnIndex("servername"));
+                    serveraddress = resultSet.getString(resultSet.getColumnIndex("serveraddress"));
+                    resultSet.close();
+                    return new ConnectionData(id, servername, serveraddress, token, customerid, password, customermail);
+                } else {
+                    resultSet.close();
+                    return null;
+                }
             } catch (Exception ex) {
                 throw ex;
             }
