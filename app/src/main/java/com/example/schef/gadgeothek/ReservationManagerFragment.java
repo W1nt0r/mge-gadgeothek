@@ -43,11 +43,7 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
             reservationView = rootView.findViewById(R.id.reservationRecyclerView);
             loadingText = rootView.findViewById(R.id.loadingText);
             errorText = rootView.findViewById(R.id.errorText);
-            loadingText.setText(R.string.reservation_loading);
-            noReservationView.setVisibility(View.GONE);
-            reservationView.setVisibility(View.GONE);
-            errorView.setVisibility(View.GONE);
-            loadingView.setVisibility(View.VISIBLE);
+            showLoading(getString(R.string.reservation_loading));
 
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
@@ -82,22 +78,38 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
 
                 @Override
                 public void onError(String message) {
-                    noReservationView.setVisibility(View.GONE);
-                    reservationView.setVisibility(View.GONE);
-                    loadingView.setVisibility(View.GONE);
-                    errorView.setVisibility(View.VISIBLE);
-                    errorText.setText(getString(R.string.reservation_error));
+                    showError(getString(R.string.reservation_error));
                 }
             });
         }
     }
 
+    public void showNoReservations() {
+        reservationView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        noReservationView.setVisibility(View.VISIBLE);
+    }
+
+    public void showError(String message) {
+        noReservationView.setVisibility(View.GONE);
+        reservationView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        errorView.setVisibility(View.VISIBLE);
+        errorText.setText(message);
+    }
+
+    public void showLoading(String message) {
+        reservationView.setVisibility(View.GONE);
+        noReservationView.setVisibility(View.GONE);
+        errorView.setVisibility(View.GONE);
+        loadingText.setText(message);
+        loadingView.setVisibility(View.VISIBLE);
+    }
+
     private void showReservations(List<Reservation> reservations) {
         if (reservations.size() == 0) {
-            reservationView.setVisibility(View.GONE);
-            loadingView.setVisibility(View.GONE);
-            errorView.setVisibility(View.GONE);
-            noReservationView.setVisibility(View.VISIBLE);
+            showNoReservations();
         } else {
             ReservationListAdapter reservationListAdapter = new ReservationListAdapter(reservations, this, DateFormat.getDateFormat(getActivity().getApplicationContext()));
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -128,11 +140,7 @@ public class ReservationManagerFragment extends Fragment implements ReservationH
     public void deleteReservation(Reservation reservation) {
         System.out.println(reservation.getReservationId());
         if (LibraryService.isLoggedIn()) {
-            reservationView.setVisibility(View.GONE);
-            noReservationView.setVisibility(View.GONE);
-            errorView.setVisibility(View.GONE);
-            loadingText.setText(getString(R.string.reservation_deleting));
-            loadingView.setVisibility(View.VISIBLE);
+            showLoading(getString(R.string.reservation_deleting));
             LibraryService.deleteReservation(reservation, new Callback<Boolean>() {
                 @Override
                 public void onCompletion(Boolean input) {

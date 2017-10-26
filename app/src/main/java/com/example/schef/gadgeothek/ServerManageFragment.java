@@ -34,6 +34,8 @@ public class ServerManageFragment extends Fragment implements ServerManager {
     private DBService db;
     private View serverView;
     private View loadingView;
+    private View serverRecyclerView;
+    private View noServerView;
     private int currentConnection;
 
     private List<ConnectionData> getServers() {
@@ -61,10 +63,8 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         if (servers == null || servers.size() == 0) {
             rootView.findViewById(R.id.serverRecyclerView).setVisibility(View.GONE);
             rootView.findViewById(R.id.noServer).setVisibility(View.VISIBLE);
+            showNoServer();
         } else {
-            rootView.findViewById(R.id.serverRecyclerView).setVisibility(View.VISIBLE);
-            rootView.findViewById(R.id.noServer).setVisibility(View.GONE);
-
             ServerListAdapter serverListAdapter = new ServerListAdapter(servers, this, currentConnection, getActivity());
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
@@ -72,9 +72,8 @@ public class ServerManageFragment extends Fragment implements ServerManager {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(serverListAdapter);
+            showServers();
         }
-        serverView.setVisibility(View.VISIBLE);
-        loadingView.setVisibility(View.GONE);
     }
 
     private void showToast(String text) {
@@ -95,6 +94,8 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
         serverView = rootView.findViewById(R.id.serverView);
         loadingView = rootView.findViewById(R.id.loadingView);
+        noServerView = rootView.findViewById(R.id.noServer);
+        serverRecyclerView = rootView.findViewById(R.id.serverRecyclerView);
 
         if (getArguments() == null || currentConnection == Constants.NO_SERVER_CHOSEN) {
             updateServerList();
@@ -121,6 +122,27 @@ public class ServerManageFragment extends Fragment implements ServerManager {
         });
 
         return rootView;
+    }
+
+    public void showServers() {
+        loadingView.setVisibility(View.GONE);
+        noServerView.setVisibility(View.GONE);
+        serverRecyclerView.setVisibility(View.VISIBLE);
+        serverView.setVisibility(View.VISIBLE);
+    }
+
+    public void showNoServer() {
+        serverRecyclerView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.GONE);
+        noServerView.setVisibility(View.VISIBLE);
+        serverView.setVisibility(View.VISIBLE);
+    }
+
+    public void showLoading() {
+        serverView.setVisibility(View.GONE);
+        noServerView.setVisibility(View.GONE);
+        serverRecyclerView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
     }
 
     private void onAttachHelper(Context context) {
@@ -150,8 +172,7 @@ public class ServerManageFragment extends Fragment implements ServerManager {
 
     @Override
     public void chooseServer(final ConnectionData connectionData) {
-        serverView.setVisibility(View.GONE);
-        loadingView.setVisibility(View.VISIBLE);
+        showLoading();
         ((TextView)loadingView.findViewById(R.id.loadingText)).setText(getString(R.string.server_loading));
         LibraryService.checkGadgeothekServerAddress(connectionData.getUri(), new Callback<List<Gadget>>() {
             @Override
