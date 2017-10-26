@@ -65,17 +65,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             password.setText(connectionData.getPassword());
             login();
         } else {
-            loadingView.setVisibility(View.GONE);
-            loginView.setVisibility(View.VISIBLE);
+            hideLoadingView();
         }
 
         return root;
     }
 
     private void login() {
-        loginView.setVisibility(View.GONE);
-        loadingView.setVisibility(View.VISIBLE);
-        loadingText.setText(getString(R.string.login_loading));
+        showLoadingView();
         final String email = mail.getText().toString();
         final String passwd = password.getText().toString();
         LibraryService.login(email, passwd, new Callback<Boolean>() {
@@ -86,16 +83,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     connectionData.setCustomermail(email);
                     ((LoginHandler) activity).login(connectionData);
                 } else {
-                    loadingView.setVisibility(View.GONE);
-                    loginView.setVisibility(View.VISIBLE);
+                    hideLoadingView();
                     Toast.makeText(getActivity().getBaseContext(), getString(R.string.login_error), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onError(String message) {
-                loadingView.setVisibility(View.GONE);
-                loginView.setVisibility(View.VISIBLE);
+                hideLoadingView();
                 mailLayout.setError(null);
                 passwordLayout.setError(null);
                 switch (message) {
@@ -112,9 +107,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    private void showLoadingView() {
+        loginView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingText.setText(getString(R.string.login_loading));
+    }
+
+    private void hideLoadingView() {
+        loadingView.setVisibility(View.GONE);
+        loginView.setVisibility(View.VISIBLE);
+    }
+
     private void onAttachHelper(Context activity) {
         if (activity instanceof LoginHandler) {
-            this.activity = (ServerChanger)activity;
+            this.activity = (ServerChanger) activity;
             db = DBService.getDBService(null);
         } else {
             throw new AssertionError("Activity must implement LoginHandler!");
