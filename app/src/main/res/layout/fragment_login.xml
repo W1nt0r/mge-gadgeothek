@@ -63,7 +63,7 @@
             android:layout_marginEnd="@dimen/button_space_between"
             android:layout_marginTop="@dimen/form_element_margin"
             android:layout_toStartOf="@id/loginButton"
-            android:background="@color/colorBackgroundNormal"
+            android:background="?android:attr/selectableItemBackground"
             android:paddingEnd="@dimen/button_padding_horizontal"
             android:paddingStart="@dimen/button_padding_horizontal"
             android:text="@string/login_register"
